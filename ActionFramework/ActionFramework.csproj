@@ -139,17 +139,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ActionFramework.Domain\ActionFramework.Domain.csproj">
-      <Project>{a7975db8-6cbc-4708-abd8-c5fc17400300}</Project>
-      <Name>ActionFramework.Domain</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Parameters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ActionFramework.Domain\ActionFramework.Domain.csproj">
+      <Project>{a7975db8-6cbc-4708-abd8-c5fc17400300}</Project>
+      <Name>ActionFramework.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
