@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ActionFramework>
+  <Settings>
+    <Setting Name="KeepClientWindow" Value="true" />
+    <Setting Name="ExecutionRoot" Value="Invoke|GetExecutionParentRoot" />
+    <Setting Name="SourceRootFolder" Value="{ExecutionRoot}source\" />
+    <Setting Name="SourceSystem" Value="GRSFI01" />
+    <Setting Name="Database" Value="{SourceSystem}DB" />
+    <Setting Name="Date" Value="Invoke|GetCurrentFormatDateTimeString" />
+    <Setting Name="LogFile" Value="{ExecutionRoot}logs\{Date}.Action.log" />
+  </Settings>
+  <Actions>
+    <Action Id="1" Type="GRSProxy" Enabled="true" Description="GRS data to SCP" BreakOnError="true">
+      <Property Name="GRSConnection" Value="DBConnection:{Database}" />
+      <Property Name="SendDataFrom" Value="2012-01-01" />
+    </Action>
+  </Actions>
+</ActionFramework>

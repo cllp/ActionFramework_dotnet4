@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ActionFramework>
+
+  <Settings>
+
+    <Setting Name="KeepClientWindow" Value="true" />
+    <Setting Name="ExecutionRoot" Value="Invoke|GetExecutionParentRoot" />
+    <Setting Name="SourceRootFolder" Value="{ExecutionRoot}source\" />
+    <Setting Name="GetCurrentFormatDateTimeString" Value="Invoke|GetCurrentFormatDateTimeString" />
+    <Setting Name="LogFile" Value="{ExecutionRoot}Logs\{GetCurrentFormatDateTimeString}.xml" />
+    <Setting Name="DataPath" Value="C:\bossw32II\data" />
+    <Setting Name="SmsServiceUrl" Value="https://www.smsteknik.se/webservices/SendSMSws1/Service.asmx" />
+    <Setting Name="SmsId" Value="Kareby bil AB" />
+    <Setting Name="SmsUser" Value="smsUVB@J4" />
+    <Setting Name="SmsPass" Value="pduxZ5" />
+    <Setting Name="SaveXmlPath" Value="{ExecutionRoot}Xml\" />
+    <Setting Name="MultiSms" Value="true" />
+    <Setting Name="MaxMultiSms" Value="6" />
+    <Setting Name="ResponseCodeFilePath" Value="{ExecutionRoot}Config\ResponseCodes.txt" /> <!-- SET TO "" TO USE INTERNAL FILE -->
+    <Setting Name="TestNumber" Value="+46766555005" /> <!-- SET TO "" TO DISABLE -->
+    <Setting Name="Query" Value="SELECT Id, Date as DateNumber, substring(Id, 0, 8) as Date, substring(Id, 10, 4) as Time, ContactId, FirstName, LastName, MobilePhone, OrgNr, SalesmanCode, Make, Model, Regnr, Ordernr, Levdatum FROM SKalkyler WHERE MobilePhone IS NOT NULL" />
+
+  </Settings>
+
+  <Actions>
+
+    <Action Id="PreTest" Type="ListProperties" Enabled="true" Description="List all properties and extended values" BreakOnError="true" />
+
+    <Action Id="1" Type="SmsAction" Enabled="true" Description="Sends sms after one week" BreakOnError="true">
+      <Property Name="DaysOfMessage" Value="-7" />
+      <Property Name="SmsMessage" Value="Hej [FirstName], Vi på Kareby bil hoppas att du är nöjd med din bil, självklart finns vi här om du undrar något i efterhand, du är alltid varmt välkommen tillbaka! Vi önskar dig en trevlig dag och kör försiktigt! Varma hälsningar [SalesmanCode]" />
+    </Action>
+
+    <Action Id="2" Type="SmsAction" Enabled="true" Description="Sends sms after a year" BreakOnError="true">
+      <Property Name="DaysOfMessage" Value="-547" />
+      <Property Name="SmsMessage" Value="Hej [FirstName], Kareby bil här, det har nu gått ca 1,5 år sedan du köpte din bil och vi hoppas att du fortfarande är nöjd! Är det så att du skulle vara intresserad av en ny bil eller vilja byta in din bil så är du varmt välkommen till oss på Kareby bil för en hjälpande hand. Trevlig dag önskar vi på Kareby bil!" />
+    </Action>
+
+  </Actions>
+
+</ActionFramework>

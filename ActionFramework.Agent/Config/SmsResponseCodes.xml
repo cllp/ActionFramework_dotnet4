@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SmsResponseCodes>
+  <Code Number="-5" Message="Extended parameter error" Error="true" />
+  <Code Number="-4" Message="Network error" Error="true" />
+  <Code Number="-3" Message="NACK (Not ACKnowledged)" Error="true" />
+  <Code Number="-2" Message="Bad Contex" Error="true" />
+  <Code Number="-1" Message="Response Timeout" Error="true" />
+  <Code Number="1" Message="Checksum error" Error="true" />
+  <Code Number="2" Message="Syntax error" Error="true" />
+  <Code Number="3" Message="Operation not supported by system" Error="true" />
+  <Code Number="4" Message="Operation not allowed" Error="true" />
+  <Code Number="5" Message="Call barring active" Error="true" />
+  <Code Number="6" Message="AdC invalid" Error="true" />
+  <Code Number="7" Message="Authentication failure" Error="true" />
+  <Code Number="8" Message="Legitimisation code for all calls, failure" Error="true" />
+  <Code Number="9" Message="GA not valid" Error="true" />
+  <Code Number="10" Message="Repetition not allowed" Error="true" />
+  <Code Number="11" Message="Legitimisation code for repetition, failure" Error="true" />
+  <Code Number="12" Message="Priority call not allowed" Error="true" />
+  <Code Number="13" Message="Legitimisation code for priority call, failure" Error="true" />
+  <Code Number="14" Message="Urgent message not allowed" Error="true" />
+  <Code Number="15" Message="Legitimisation code for urgent message, failure" Error="true" />
+  <Code Number="16" Message="Reverse charging not allowed" Error="true" />
+  <Code Number="17" Message="Legitimisation code for rev. charging, failure" Error="true" />
+  <Code Number="18" Message="Deferred delivery not allowed" Error="true" />
+  <Code Number="19" Message="New AC not valid" Error="true" />
+  <Code Number="20" Message="New legitimisation code not valid" Error="true" />
+  <Code Number="21" Message="Standard text not valid" Error="true" />
+  <Code Number="22" Message="Time period not valid" Error="true" />
+  <Code Number="23" Message="Message type not supported by system" Error="true" />
+  <Code Number="24" Message="Message too long" Error="true" />
+  <Code Number="25" Message="Requested standard text not valid" Error="true" />
+  <Code Number="26" Message="Message type not valid for the pager type" Error="true" />
+  <Code Number="27" Message="Message not found in SMSC" Error="true" />
+  <Code Number="30" Message="Subscriber hang-up" Error="true" />
+  <Code Number="31" Message="Fax group not supported" Error="true" />
+  <Code Number="32" Message="Fax message type not supported" Error="true" />
+  <Code Number="33" Message="Address already in list (60 series)" Error="true" />
+  <Code Number="34" Message="Address not in list (60 series)" Error="true" />
+  <Code Number="35" Message="List full, cannot add address to list (60 series)" Error="true" />
+  <Code Number="36" Message="RPID already in use" Error="true" />
+  <Code Number="37" Message="Delivery in progress" Error="true" />
+  <Code Number="38" Message="Message forwarded" Error="true" />
+</SmsResponseCodes>

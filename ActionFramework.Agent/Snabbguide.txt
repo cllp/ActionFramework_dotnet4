@@ -1,0 +1,29 @@
+﻿Installation av Windows Service
+-------------------------------
+
+1. Öppna Visual Studio Command Prompt som administratör.
+2. I Command Prompten: gå till debug foldern i ActionFramework.Agent projektet. 
+	(Hos mig är det: cd C:\Source\Utility.ActionFramework\ActionFramework.Agent\bin\Debug)
+3. Skriv: installutil ActionFramework.Agent.exe
+4. Om servicen installerar sig som den ska, gå till servicar, leta upp ActionFramework.AgentService och starta den.
+5. Testa servicen genom att öppna browser, skriva in: http://localhost:1000/AgentService/EchoWithGet?s=hej 
+6. Har lagt till en run: http://localhost:1000/AgentService/Run - denna returnerar loggen
+7. Får du svar så funkar det!
+8. uninstall: installutil ActionFramework.Agent.exe /u
+
+
+StopTImer
+http://localhost:1001/AgentService/StopTimer
+
+StartTimer
+http://localhost:1001/AgentService/StartTimer?interval=3000
+
+Install agent on a new server with .NET Framework 4
+
+Install
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319>installutil C:\Agents\02\ActionFramework.Agent.exe
+Uninstall
+C:\Windows\Microsoft.NET\Framework64\v4.0.30319>installutil C:\Agents\02\ActionFramework.Agent.exe /u
+
+GetEventLoginfo
+http://localhost:1001/AgentService/GetEventLogInfo?logname=Application&level=1,2,3,4,5&eventId=77&timeSpanStart=2013-12-10T15:30:30.000Z&timeSpanEnd=2013-12-11T15:30:30.000Z

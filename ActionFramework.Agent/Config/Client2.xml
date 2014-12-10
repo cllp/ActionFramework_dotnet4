@@ -1,0 +1,127 @@
+﻿<Client xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/ActionFramework.Domain.Model">
+  <Actions>
+    <Action>
+      <BreakOnError>false</BreakOnError>
+      <AgentId>1</AgentId>
+      <Description>Sends sms after one week                                                                                                                                                                                                                                       </Description>
+      <Enabled>true</Enabled>
+      <Properties>
+        <Property>
+          <ActionId>1</ActionId>
+          <Enabled>true</Enabled>
+          <Name>DaysOfMessage            </Name>
+          <Value>-7</Value>
+        </Property>
+        <Property>
+          <ActionId>1</ActionId>
+          <Enabled>true</Enabled>
+          <Name>SmsMessage               </Name>
+          <Value>Hej [FirstName], Vi på Kareby bil hoppas att du är nöjd med din bil, självklart finns vi här om du undrar något i efterhand, du är alltid varmt välkommen tillbaka! Vi önskar dig en trevlig dag och kör försiktigt! Varma hälsningar [SalesmanCode]</Value>
+        </Property>
+      </Properties>
+      <Type>SmsAction                                         </Type>
+    </Action>
+    <Action>
+      <BreakOnError>false</BreakOnError>
+      <AgentId>1</AgentId>
+      <Description>Sends sms after a year                                                                                                                                                                                                                                         </Description>
+      <Enabled>true</Enabled>
+      <Properties>
+        <Property>
+          <ActionId>2</ActionId>
+          <Enabled>true</Enabled>
+          <Name>DaysOfMessage            </Name>
+          <Value>-547</Value>
+        </Property>
+        <Property>
+          <ActionId>2</ActionId>
+          <Enabled>true</Enabled>
+          <Name>SmsMessage               </Name>
+          <Value>Hej [FIRSTNAME], Kareby bil här, det har nu gått ca 1,5 år sedan du köpte din bil och vi hoppas att du fortfarande är nöjd! Är det så att du skulle vara intresserad av en ny bil eller vilja byta in din bil så är du varmt välkommen till oss på Kareby bil för en hjälpande hand. Trevlig dag önskar vi på Kareby bil!</Value>
+        </Property>
+      </Properties>
+      <Type>SmsAction                                         </Type>
+    </Action>
+  </Actions>
+  <Active>true</Active>
+  <Application>Kareby Bil                                        </Application>
+  <agentCode>12345                                             </agentCode>
+  <agentSecret>12345                    </agentSecret>
+  <Id>1</Id>
+  <Schedules>
+    <Schedule>
+      <AgentId>0</AgentId>
+      <Enabled>false</Enabled>
+      <Occurence>1</Occurence>
+      <OccurenceValue>5</OccurenceValue>
+      <StartDate>2013-01-12T00:00:00</StartDate>
+    </Schedule>
+  </Schedules>
+  <Settings>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>KeepClientWindow         </Name>
+      <Value>true</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>ExecutionRoot            </Name>
+      <Value>Invoke|GetExecutionParentRoot</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>SourceRootFolder         </Name>
+      <Value>{ExecutionRoot}source\</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>DataPath                 </Name>
+      <Value>C:\bossw32II\data</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>SmsServiceUrl            </Name>
+      <Value>https://www.smsteknik.se/webservices/SendSMSws1/Service.asmx</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>SmsId                    </Name>
+      <Value>Kareby bil AB</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>SmsUser                  </Name>
+      <Value>smsUVB@J4</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>SmsPass                  </Name>
+      <Value>pduxZ5</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>SaveXmlPath              </Name>
+      <Value>{ExecutionRoot}Xml\</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>MultiSms                 </Name>
+      <Value>true</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>MaxMultiSms              </Name>
+      <Value>6</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>ResponseCodeFilePath     </Name>
+      <Value>{ExecutionRoot}Config\ResponseCodes.txt</Value>
+    </Setting>
+    <Setting>
+      <AgentId>1</AgentId>
+      <Name>TestNumber               </Name>
+      <Value>+46766555005</Value>
+    </Setting>
+  </Settings>
+</Client>

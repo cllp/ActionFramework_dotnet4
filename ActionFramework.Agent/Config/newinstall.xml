@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ActionFramework>
+
+  <Settings>
+
+    <Setting Name="KeepClientWindow" Value="false" />
+    <Setting Name="ExecutionRoot" Value="Invoke|GetExecutionParentRoot" />
+    <Setting Name="ExecutionPath" Value="{ExecutionRoot}ClientOutput\Release\" />
+    <Setting Name="SourceRootFolder" Value="{ExecutionRoot}source\" />
+    <Setting Name="LineInstallationPort" Value="{{\CONFIG\Common\BasePortNumber}}" />
+    <Setting Name="LineRegistryPath" Value="SOFTWARE\WmData\Lettera\LDS\{LineInstallationPort}" />
+    <Setting Name="GetCurrentFormatDateTimeString" Value="Invoke|GetCurrentFormatDateTimeString" />
+    <Setting Name="LogFile" Value="{ExecutionRoot}{GetCurrentFormatDateTimeString}.log" />
+    <Setting Name="SkeltaRootFolder" Value="Invoke|ReadRegistry|SOFTWARE\\Skelta\\BPM.NET,ConfigFilePath,LocalMachine" />
+    <Setting Name="BFURootFolder" Value="{{\CONFIG\Common\RootDir}}" />
+    <Setting Name="MachineName" Value="{{\Config\Common\LipServerName}}" />   
+    <Setting Name="CompanyNameShort" Value="{{\CONFIG\Common\CompanyNameShort}}" />
+    <Setting Name="EnvironmentNameShort" Value="{{\CONFIG\Common\EnvironmentNameShort}}" />
+    <Setting Name="DataSource" Value="{CompanyNameShort}{EnvironmentNameShort}" />
+    <Setting Name="DatabaseService" Value="ORCL" />
+    <Setting Name="DatabaseUserId" Value="BPM_FARM" />
+    <Setting Name="DatabasePassword" Value="asmint3h" />
+    <Setting Name="DefaultProvider" Value="oracledataprovider" />
+    <Setting Name="DefaultRepository" Value="BFU_REP_{CompanyNameShort}{EnvironmentNameShort}" />
+    <Setting Name="WebServiceRoot" Value="https://{{\Config\Common\LipServerName}}/BFUS_{DataSource}" />
+    <Setting Name="ServicePrincipalName" Value="{MachineName}" />
+    <Setting Name="SkeltaProductKey" Value="{{SkeltaProductKey}}" />
+    <Setting Name="SkeltaUserId" Value="{{SkeltaUserId}}" />
+    <Setting Name="SkeltaUserPassword" Value="asmint32h" />
+    
+  </Settings>
+  
+  <Actions>
+
+        <Action Id="PreTest" Type="ListProperties" Enabled="true" Description="List all properties and exoended values" BreakOnError="false" />
+
+
+        <Action Id="SH.Stop.SkeltaWorkflow2" Type="ServiceHandler" Enabled="false" BreakOnError="true"  Description="ServiceHandler, Provide a ServiceAction of type: Start|Stop|Restart">
+          <Property Name="ServiceAction" Value="Stop" />
+          <Property Name="ServiceName" Value="SkeltaWorkflow2" />
+          <Property Name="TimeOut" Value="20000" />
+        </Action>
+
+        <Action Id="SH.Stop.W3SVC" Type="ServiceHandler" Enabled="false" BreakOnError="true"  Description="ServiceHandler, Provide a ServiceAction of type: Start|Stop|Restart">
+          <Property Name="ServiceAction" Value="Stop" />
+          <Property Name="ServiceName" Value="W3SVC" />
+          <Property Name="TimeOut" Value="20000" />
+        </Action>
+
+    
+
+
+        <Action Id="F01" Type="CreateFolder" Enabled="true" Description="Create Prodat Folders">
+        <Property Name="Path" Value="{BFURootFolder}\Volatile\Prodat\In\" />
+        </Action>
+
+        <Action Id="F02" Type="CreateFolder" Enabled="true" Description="Create Prodat Folders">
+        <Property Name="Path" Value="{BFURootFolder}\Volatile\Prodat\In\Error\" />
+        </Action>
+
+        <Action Id="F03" Type="CreateFolder" Enabled="true" Description="Create Prodat Folders">
+        <Property Name="Path" Value="{BFURootFolder}\Volatile\Prodat\In\Processed\" />
+        </Action>
+
+        <Action Id="F04" Type="CreateFolder" Enabled="true" Description="Create Prodat Folders">
+        <Property Name="Path" Value="{BFURootFolder}\Volatile\Prodat\Out\" />
+        </Action>
+        
+        <Action Id="DB01" Type="FileContentReplace" Enabled="false" Description="Clean DBPReInstall">
+        <Property Name="FilePath" Value="{SourceRootFolder}DBPreInstall\InstallDB_Skelta.cmd" />
+        <Property Name="PatternToReplace" Value="$[DataSource]" />
+        <Property Name="PatternToReplaceWith" Value="{DataSource}" />
+    </Action>
+
+        <Action Id="DB02" Type="FileContentReplace" Enabled="false" Description="Clean DBPReInstall">
+        <Property Name="FilePath" Value="{SourceRootFolder}DBPreInstall\InstallDB_Skelta.sql" />
+        <Property Name="PatternToReplace" Value="$[DataSource]" />
+        <Property Name="PatternToReplaceWith" Value="{DataSource}" />
+        </Action>
+
+        <Action Id="DB03" Type="FileContentReplace" Enabled="false" Description="Clean DBPReInstall">
+        <Property Name="FilePath" Value="{SourceRootFolder}DBPreInstall\InstallDB_Skelta.sql" />
+        <Property Name="PatternToReplace" Value="$[DatabasePassword]" />
+        <Property Name="PatternToReplaceWith" Value="{DatabasePassword}" />
+        </Action>
+
+        <Action Id="DB04" Type="ExecuteCommand" Enabled="false" Description="Install DB">
+        <Property Name="CommandFile" Value="{SourceRootFolder}DBPreInstall\InstallDB_Skelta.cmd" />
+        <Property Name="Arguments" Value="" />
+        </Action>
+
+        <Action Id="1" Type="CreateFarm" Enabled="true" Description="Create Skelta Farm and Skelta websites">
+        <Property Name="Domain" Value="{MachineName}" />
+      <Property Name="SkeltaFarmName" Value="Skelta Farm" />
+      <Property Name="SkeltaFarmDatabaseName" Value="BPM_FARM" />
+    </Action>
+
+        <Action Id="2" Type="CreateDatasource" Enabled="true" Description="Create Skelta Datasource and all that">
+        <Property Name="DataSourceDatabaseUserId" Value="BPM_REP" />
+        <Property Name="DataSourceDatabasePassword" Value="{DatabasePassword}" />
+      <Property Name="DatasourceName" Value="BPM_Datasource" />
+      <Property Name="DatasourceDescription" Value="BPM_Datasource" />
+    </Action>
+
+        <Action Id="3" Type="CreateFormsRepository" Enabled="true" Description="Create Skelta Fors Repository">
+      <Property Name="Repository" Value="{DefaultRepository}" />
+      <Property Name="DataSourceName" Value="BPM_Datasource" />
+        <Property Name="FormsConnectionString" Value="Data Source = {DataSource}; User Id = UF; Password = asmint3h;" />
+    </Action>
+
+        <Action Id="4" Type="CreateDefaultAdmin" Enabled="true" Description="CreateDefaultAdmin">
+      <Property Name="UserId" Value="{SkeltaUserId}" />
+      <Property Name="Provider" Value="{DefaultProvider}" />
+      <Property Name="Repository" Value="{DefaultRepository}" />
+    </Action>
+
+        <Action Id="5" Type="CopyFile" Enabled="true" Description="Copy SOA dll">
+      <Property Name="FileFolder" Value="{SourceRootFolder}Dll\" />
+      <Property Name="DestinationFolder" Value="{SkeltaRootFolder}BFUWorkflowInterfaceAssemblies\" />
+      <Property Name="FileName" Value="LogicaWorkflowObjectAccess.dll" />
+    </Action>
+
+        <Action Id="6" Type="CopyFile" Enabled="true" Description="Copy Activities dll">
+      <Property Name="FileFolder" Value="{SourceRootFolder}Dll\" />
+      <Property Name="DestinationFolder" Value="{SkeltaRootFolder}BFUWorkflowInterfaceAssemblies\" />
+      <Property Name="FileName" Value="Logica.Utility.Workflow.Activties.dll" />
+    </Action>
+
+        <Action Id="7" Type="CopyFile" Enabled="true" Description="BFU Authentication dll">
+      <Property Name="FileFolder" Value="{SourceRootFolder}Dll\Authentication\" />
+      <Property Name="DestinationFolder" Value="{SkeltaRootFolder}BFUWorkflowInterfaceAssemblies\" />
+      <Property Name="FileName" Value="*.dll" />
+    </Action>
+
+        <Action Id="8a" Type="CopyFile" Enabled="true" Description="Copy Custom Activities Definition">
+      <Property Name="FileFolder" Value="{SourceRootFolder}Xml\" />
+      <Property Name="DestinationFolder" Value="{SkeltaRootFolder}WorkflowElements\Default\en-US\Actions\XML\" />
+      <Property Name="FileName" Value="LogicaCustomActivities.xml" />
+    </Action>
+
+        <Action Id="8b" Type="CopyFile" Enabled="true" Description="Copy Custom Activities Timeout dll">
+        <Property Name="FileFolder" Value="{SourceRootFolder}Dll\CustomActivity\" />
+        <Property Name="DestinationFolder" Value="{SkeltaRootFolder}bin\" />
+        <Property Name="FileName" Value="Custom_Timeout.dll" />
+        </Action>
+
+        <Action Id="9a" Type="FileContentReplace" Enabled="false" Description="Clean webconfig for Skelta">
+        <Property Name="FilePath" Value="{SourceRootFolder}Web\web.config" />
+        <Property Name="PatternToReplace" Value="$[WebServiceRoot]" />
+        <!-- in the package files we need to add variables for hardcoded entries like: $[WebServiceRoot] = https://wmsi003642/BFUS_PERFOTST/-->
+        <Property Name="PatternToReplaceWith" Value="{WebServiceRoot}" />
+        </Action>
+
+        <Action Id="9b" Type="FileContentReplace" Enabled="false" Description="Clean webconfig for Skelta">
+        <Property Name="FilePath" Value="{SourceRootFolder}Web\web.config" />
+        <Property Name="PatternToReplace" Value="$[ServicePrincipalName]" />
+        <!-- in the package files we need to add variables for hardcoded entries like: $[WebServiceRoot] = https://wmsi003642/BFUS_PERFOTST/-->
+        <Property Name="PatternToReplaceWith" Value="{ServicePrincipalName}" />
+        </Action>
+
+        <Action Id="9c" Type="FileContentReplace" Enabled="false" Description="Clean webconfig for Skelta">
+        <Property Name="FilePath" Value="{SourceRootFolder}Web\ProdatTransactionView.aspx.cs" />
+        <Property Name="PatternToReplace" Value="$[Repository]" />
+        <Property Name="PatternToReplaceWith" Value="{DefaultRepository}" />
+        </Action>
+
+        <Action Id="9d" Type="FileContentReplace" Enabled="false" Description="Clean webconfig for Skelta">
+        <Property Name="FilePath" Value="{SourceRootFolder}Web\ProdatView.aspx.cs" />
+        <Property Name="PatternToReplace" Value="$[Repository]" />
+        <Property Name="PatternToReplaceWith" Value="{DefaultRepository}" />
+        </Action>
+
+        <Action Id="9e" Type="CopyFile" Enabled="false" Description="Copy all webpages to Skelta">
+        <Property Name="FileFolder" Value="{SourceRootFolder}Web\" />
+        <Property Name="DestinationFolder" Value="{SkeltaRootFolder}Web\" />
+        <Property Name="FileName" Value="*" />
+        </Action>
+
+        <Action Id="10a" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Enterprice Console">
+        <Property Name="FilePath" Value="{SourceRootFolder}EnterpriceConsole\web.config" />
+        <Property Name="PatternToReplace" Value="$[MachineName]" />
+        <Property Name="PatternToReplaceWith" Value="{MachineName}" />
+        </Action>
+
+        <Action Id="10b" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Enterprice Console">
+        <Property Name="FilePath" Value="{SourceRootFolder}EnterpriceConsole\web.config" />
+        <Property Name="PatternToReplace" Value="$[BFURootFolder]" />
+        <Property Name="PatternToReplaceWith" Value="{BFURootFolder}" />
+        </Action>
+
+        <Action Id="10c" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Enterprice Console">
+        <Property Name="FilePath" Value="{SourceRootFolder}EnterpriceConsole\web.config" />
+        <Property Name="PatternToReplace" Value="$[WebServiceRoot]" />
+        <Property Name="PatternToReplaceWith" Value="{WebServiceRoot}" />
+        </Action>
+
+        <Action Id="10d" Type="ReplaceFile" Enabled="true" Description="Replace the Web.config for adding BFU authentication in Skelta">
+        <Property Name="SourceFile" Value="{SourceRootFolder}EnterpriceConsole\Web.config" />
+        <Property Name="DestinationFile" Value="{SkeltaRootFolder}Web\EnterpriseConsole\Web.config" />
+        </Action>
+
+
+        <Action Id="11a" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Skelta">
+          <Property Name="FilePath" Value="{SourceRootFolder}Config\ObjectAccess\app.Config" />
+          <Property Name="PatternToReplace" Value="$[WebServiceRoot]" />
+          <Property Name="PatternToReplaceWith" Value="{WebServiceRoot}" />
+        </Action>
+
+        <Action Id="11b" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Skelta">
+          <Property Name="FilePath" Value="{SourceRootFolder}Config\ObjectAccess\app.Config" />
+          <Property Name="PatternToReplace" Value="$[ServicePrincipalName]" />
+          <Property Name="PatternToReplaceWith" Value="{ServicePrincipalName}" />
+        </Action>
+
+        <Action Id="11c" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Skelta">
+          <Property Name="FilePath" Value="{SourceRootFolder}Config\ObjectAccess\app.Config" />
+          <Property Name="PatternToReplace" Value="$[MachineName]" />
+          <Property Name="PatternToReplaceWith" Value="{MachineName}" />
+        </Action>
+
+        <Action Id="11d" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Skelta">
+          <Property Name="FilePath" Value="{SourceRootFolder}Config\ObjectAccess\app.Config" />
+          <Property Name="PatternToReplace" Value="$[BfuRootFolder]" />
+          <Property Name="PatternToReplaceWith" Value="{BFURootFolder}" />
+        </Action>
+
+        <Action Id="11e" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Skelta">
+          <Property Name="FilePath" Value="{SourceRootFolder}Config\ObjectAccess\app.Config" />
+          <Property Name="PatternToReplace" Value="$[SkeltaUserName]" />
+          <Property Name="PatternToReplaceWith" Value="{SkeltaUserId}" />
+        </Action>
+
+        <Action Id="11f" Type="FileContentReplace" Enabled="true" Description="Clean webconfig for Skelta">
+          <Property Name="FilePath" Value="{SourceRootFolder}Config\ObjectAccess\app.Config" />
+          <Property Name="PatternToReplace" Value="$[SkeltaUserPassword]" />
+          <Property Name="PatternToReplaceWith" Value="{SkeltaUserPassword}" />
+        </Action>
+
+        <Action Id="11g" Type="ReplaceFile" Enabled="true" Description="Copy config with replace for ObjectAccess">
+      <Property Name="SourceFile" Value="{SourceRootFolder}Config\ObjectAccess\app.Config" />
+      <Property Name="DestinationFile" Value="{SkeltaRootFolder}Bin\WFEngine.NET2.exe.config" />
+    </Action>
+
+        <Action Id="12" Type="CreateSOAFolder" Enabled="true" Description="Create Skelta SOA Folder Dependent on CopyDlls for SOA Folder">
+      <Property Name="Repository" Value="{DefaultRepository}" />
+      <Property Name="FolderName" Value="BFUWorkflowInterfaceAssemblies" />
+      <Property Name="FolderDescription" Value="BFUWorkflowInterfaceAssemblies" />
+      <Property Name="FolderPath" Value="{SkeltaRootFolder}BFUWorkflowInterfaceAssemblies" />
+      <Property Name="Provider" Value="{DefaultProvider}" />
+      <Property Name="UserId" Value="{SkeltaUserId}" />
+    </Action>
+
+        <!--
+        the definition is located in the db so we need to register it in UI and then copy it fron the db
+        Select the xml with the following query in BPM_REP (SELECT OBJECTXML FROM SKEASSEMBLYLIST)
+        and update the LogicaWorkflowObjectAccess.Definition.xml file.
+        -->       
+
+        <Action Id="13a" Type="OraScriptExecuteNonQuery" Enabled="true" Description="Delete SOA Before Update">
+          <Property Name="ConnectionString" Value="Data Source = {DataSource}; User Id = BPM_REP; Password = asmint3h;" />
+          <Property Name="CommandText" Value="DELETE FROM SKEASSEMBLYLIST WHERE Title = 'LogicaWorkflowObjectAccess'" />
+        </Action>
+
+        <Action Id="13b" Type="RegisterSOA" Enabled="true" Description="Register the SOA dll">
+          <Property Name="SOAAssembyPath" Value="{SkeltaRootFolder}BFUWorkflowInterfaceAssemblies\LogicaWorkflowObjectAccess.dll" />
+          <Property Name="AssemblyVersion" Value="4.0.0.0" />
+          <Property Name="AssemblyName" Value="{SOAAssembyPath}" />
+          <Property Name="AssemblyTitle" Value="LogicaWorkflowObjectAccess" />
+          <Property Name="SOAAssmeblyXml" Value="{SourceRootFolder}SOA\LogicaWorkflowObjectAccess.Definition.xml" />
+          <Property Name="Provider" Value="{DefaultProvider}" />
+          <Property Name="UserId" Value="{SkeltaUserId}" />
+          <Property Name="Repository" Value="{DefaultRepository}" />
+        </Action>
+
+    <!-- make sure that the requires folders are created se doc -->
+        <Action Id="14" Type="CreateFileWatcherFolder" Enabled="true" Description="Create Skelta FileWatcher Folder">
+      <Property Name="FolderName" Value="ProdatIn" />
+      <Property Name="Repository" Value="{DefaultRepository}" />
+        <Property Name="FolderPath" Value="{BFURootFolder}\Volatile\Prodat\In\" />
+      <Property Name="Provider" Value="{DefaultProvider}" />
+      <Property Name="UserId" Value="{SkeltaUserId}" />
+    </Action>
+
+        <Action Id="15a" Type="MultipleContentReplace" Enabled="true" Description="Replace repository names in workflow definitions">
+        <Property Name="RootFolder" Value="{SourceRootFolder}WFDefinition\" />
+        <Property Name="FileName" Value="*.xml" />
+        <Property Name="PatternToReplace" Value="BFU_SCHANGE_REPOSITORY" />
+        <Property Name="PatternToReplaceWith" Value="{DefaultRepository}" />
+        </Action>
+
+        <Action Id="15b" Type="CleanWorkflowXmlPath" Enabled="true" Description="Clean workflow definitions">
+        <Property Name="PathSourcePatternUrl" Value="D:\Program Files\Skelta\BPM.NET\" />
+      <Property Name="RootFolder" Value="{SourceRootFolder}WFDefinition\" />
+      <Property Name="CleanDirectory" Value="{RootFolder}Clean\" />
+      <Property Name="FileName" Value="*.xml" />
+    </Action>
+
+        <Action Id="16" Type="CreateWorkflow" Enabled="true" Description="CreateWorkflow">
+	      <Property Name="Repository" Value="{DefaultRepository}" />
+      <Property Name="RootFolder" Value="{SourceRootFolder}WFDefinition\Clean\" />
+      <Property Name="FileName" Value="*.xml" />
+	      <Property Name="ConnectionString" Value="Data Source = {DataSource}; User Id = BPM_REP; Password = {DatabasePassword};" />
+      <Property Name="UserId" Value="{SkeltaUserId}" />
+      <Property Name="Provider" Value="{DefaultProvider}" />
+    </Action>
+	
+	      <Action Id="17" Type="ImportWorkflow" Enabled="true" Description="Import ALL Skelta Workflow Definitions">
+	      <Property Name="Repository" Value="{DefaultRepository}" />
+      <Property Name="RootFolder" Value="{SourceRootFolder}WFDefinition\Clean\" />
+      <Property Name="FileName" Value="*.xml" />
+	      <Property Name="ConnectionString" Value="Data Source = {DataSource}; User Id = BPM_REP; Password = {DatabasePassword};" />
+      <Property Name="UserId" Value="{SkeltaUserId}" />
+      <Property Name="Provider" Value="{DefaultProvider}" />
+    </Action>
+
+    <!-- Special events is associated with this folder
+      1. We have a workflow.
+      When the event is fired the workflow is added.
+    -->
+        <Action Id="18" Type="CreateFilewatcherAssociation" Enabled="true" Description="CreateFilewatcherAssociation">
+        <Property Name="Repository" Value="{DefaultRepository}" />
+      <Property Name="WorkflowName" Value="ProdatIn" />
+      <Property Name="FileType" Value="*.edi" />
+      <Property Name="UserId" Value="{SkeltaUserId}" />
+      <Property Name="Provider" Value="{DefaultProvider}" />
+        <Property Name="FilePath" Value="{BFURootFolder}\Volatile\Prodat\In\" />
+      <Property Name="EventType" Value="Created" />
+    </Action>
+
+        <Action Id="19" Type="OraScriptExecuteNonQuery" Enabled="true" Description="Adds an entry into the SKADDINPROVIDERS">
+        <Property Name="ConnectionString" Value="Data Source = {DataSource}; User Id = BPM_REP; Password = asmint3h;" />
+        <Property Name="CommandText" Value="insert when (condition='true') then INTO SKADDINPROVIDERS (TYPE, NAME, DESCRIPTION, CLASSNAME, ASSEMBLY, ISGACASSEMBLY, ISDEFAULT, ISGLOBAL, LASTUPDATEDDATETIME) VALUES ('ECEvents', 'SkeltaEnterpriseconsoleLoginEvents', 'Skelta Enterprise Console Login Events', 'Logica.Utility.Workflow.Authentication.BFUECEvent', 'BFUWorkflowInterfaceAssemblies\LogicaWorkflowAuthentication.dll', 0, 0, 0, sysdate) select 'true' as condition from dual where not exists (SELECT * FROM SKADDINPROVIDERS WHERE NAME = 'SkeltaEnterpriseconsoleLoginEvents')" />
+    </Action>
+
+        <Action Id="20" Type="FileContentReplace" Enabled="true" Description="Replace old BFU_SCHANGE_REPOSITORY">
+          <Property Name="FilePath" Value="{BFURootFolder}\IIS\WebServices\BFU\web.Config" />
+          <Property Name="PatternToReplace" Value="BFU_SCHANGE_REPOSITORY" />
+          <Property Name="PatternToReplaceWith" Value="{DefaultRepository}" />
+        </Action>
+
+        <Action Id="SH.Start.SkeltaWorkflow2" Type="ServiceHandler" Enabled="false" BreakOnError="true"  Description="ServiceHandler, Provide a ServiceAction of type: Start|Stop|Restart">
+        <Property Name="ServiceAction" Value="Start" />
+        <Property Name="ServiceName" Value="SkeltaWorkflow2" />
+        <Property Name="TimeOut" Value="20000" />
+        </Action>
+
+
+        <Action Id="SH.Start.W3SVC" Type="ServiceHandler" Enabled="true" BreakOnError="true"  Description="ServiceHandler, Provide a ServiceAction of type: Start|Stop|Restart">
+        <Property Name="ServiceAction" Value="Start" />
+        <Property Name="ServiceName" Value="W3SVC" />
+        <Property Name="TimeOut" Value="20000" />
+        </Action>
+
+
+        </Actions>
+
+  <!-- Automate license activation -->
+  
+  <!-- Remote debugging / configuration -->
+  
+</ActionFramework>

@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F4EA4B53-CDB0-4677-9934-A11BB4BFD171}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ActionFramework</RootNamespace>
+    <AssemblyName>ActionFramework</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\Logica\branches\BFUS_6.0\Infrastructure\Dll\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=104.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\RestSharp.104.4.0\lib\net4\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Action\Build.cs" />
+    <Compile Include="Action\Ftp.cs" />
+    <Compile Include="Action\CopyFile.cs" />
+    <Compile Include="Action\CreateFolder.cs" />
+    <Compile Include="Action\ExecuteCommand.cs" />
+    <Compile Include="Action\ExecuteFile.cs" />
+    <Compile Include="Action\FileContentReplace.cs" />
+    <Compile Include="Action\ListProperties.cs" />
+    <Compile Include="Action\Log.cs" />
+    <Compile Include="Action\MergeXml.cs" />
+    <Compile Include="Action\MultipleFileContentReplace.cs" />
+    <Compile Include="Action\ReadRegistry.cs" />
+    <Compile Include="Action\InstallApp.cs" />
+    <Compile Include="Action\ReplaceFile.cs" />
+    <Compile Include="Action\SendMail.cs" />
+    <Compile Include="Action\ServiceHandler.cs" />
+    <Compile Include="Action\UnZipAction.cs" />
+    <Compile Include="Action\XmlReplace.cs" />
+    <Compile Include="Action\ZipAction.cs" />
+    <Compile Include="Base\ActionBase.cs" />
+    <Compile Include="ActionFactory.cs" />
+    <Compile Include="Classes\ActionList.cs" />
+    <Compile Include="Classes\ActionHelper.cs" />
+    <Compile Include="Enum\ResourceOrigin.cs" />
+    <Compile Include="Enum\LogType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Enum\ParameterType.cs" />
+    <Compile Include="Model\ActionListParameters.cs" />
+    <Compile Include="Model\ResourceParameter.cs" />
+    <Compile Include="Classes\AgentConfiguration.cs" />
+    <Compile Include="Classes\ApplicationInfo.cs" />
+    <Compile Include="Classes\Common.cs" />
+    <Compile Include="Classes\Compressor.cs" />
+    <Compile Include="Classes\Constants.cs" />
+    <Compile Include="Classes\DateHelper.cs" />
+    <Compile Include="Classes\EventLogger.cs" />
+    <Compile Include="Classes\GlobalActionFunctions.cs" />
+    <Compile Include="Model\Resources.cs" />
+    <Compile Include="Enum\ResourceFileType.cs" />
+    <Compile Include="Logging\Logs\XmlLog.cs" />
+    <Compile Include="Logging\Logs\WarningLog.cs" />
+    <Compile Include="Logging\Logs\ExceptionLog.cs" />
+    <Compile Include="Logging\Logs\AssemblyLog.cs" />
+    <Compile Include="Logging\Logs\ActionResultLog.cs" />
+    <Compile Include="Logging\Logger.cs" />
+    <Compile Include="Classes\Replace.cs" />
+    <Compile Include="Classes\RestHelper.cs" />
+    <Compile Include="Classes\RsaHelper.cs" />
+    <Compile Include="Classes\Serializer.cs" />
+    <Compile Include="Classes\TimespanUtil.cs" />
+    <Compile Include="Context\AgentConfigurationContext.cs" />
+    <Compile Include="Logging\LogContext.cs" />
+    <Compile Include="Model\EventLogs.cs" />
+    <Compile Include="Logging\LogElements.cs" />
+    <Compile Include="DataSource\XmlDataSource.cs" />
+    <Compile Include="Model\ActionProperty.cs" />
+    <Compile Include="Logging\Logs\InformationLog.cs" />
+    <Compile Include="Enum\DataSourceFormat.cs" />
+    <Compile Include="Enum\DataSourceLocation.cs" />
+    <Compile Include="Enum\ActionStatus.cs" />
+    <Compile Include="Events\InitEventArgs.cs" />
+    <Compile Include="Extensions\ActionExtension.cs" />
+    <Compile Include="Extensions\ModelExtensions.cs" />
+    <Compile Include="Interfaces\IAction.cs" />
+    <Compile Include="Interfaces\IActionDataSource.cs" />
+    <Compile Include="Interfaces\IActionList.cs" />
+    <Compile Include="Interfaces\ICommon.cs" />
+    <Compile Include="Interfaces\ICompressor.cs" />
+    <Compile Include="Interfaces\IEventLogger.cs" />
+    <Compile Include="Interfaces\IAgentConfiguration.cs" />
+    <Compile Include="Logging\Interfaces\ILogElement.cs" />
+    <Compile Include="Logging\Interfaces\ILogger.cs" />
+    <Compile Include="Interfaces\IReplace.cs" />
+    <Compile Include="Model\DataSourceParameter.cs" />
+    <Compile Include="Interfaces\IParameter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ActionFramework.Domain\ActionFramework.Domain.csproj">
+      <Project>{a7975db8-6cbc-4708-abd8-c5fc17400300}</Project>
+      <Name>ActionFramework.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Parameters\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

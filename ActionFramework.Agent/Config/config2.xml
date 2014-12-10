@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ActionFramework>
+
+  <Settings>
+
+    <Setting Name="KeepClientWindow" Value="true" />
+    <Setting Name="ExecutionRoot" Value="Invoke|GetExecutionParentRoot" />
+    <Setting Name="SourceRootFolder" Value="{ExecutionRoot}source\" />
+    <Setting Name="ConnectionString" Value="Data Source=.;Database=ActionFramework;Persist Security Info=True;Trusted_Connection=true;Pooling=False" />
+    <!--<Setting Name="ConnectionString" Value="Data Source=.;Database=ActionFramework;Persist Security Info=True;Trusted_Connection=true;Pooling=False" />-->
+    <Setting Name="GetCurrentFormatDateTimeString" Value="Invoke|GetCurrentFormatDateTimeString" />
+    <Setting Name="LogFile" Value="{ExecutionRoot}Logs\{GetCurrentFormatDateTimeString}.log.xml" />
+    <Setting Name="ScriptLocation" Value="C:\Source\Stratiteq\SCP\Main\Source\Database\" />
+
+  </Settings>
+
+  <Actions>
+
+
+    <Action Id="123" Type="SqlQuery" Enabled="true" ClientExecute="false" Description="Query Database Return Xml" BreakOnError="true">
+      <Property Name="ConnectionString" Value="{ConnectionString}" />
+      <Property Name="QueryText" Value="SELECT * from sys.dm_os_performance_counters WHERE object_name = 'SQLServer:General Statistics'" />
+    </Action>
+
+    <Action Id="124" Type="SqlAlarm" Enabled="true" ClientExecute="true" Description="Query Database Return Xml" BreakOnError="true">
+      <Property Name="Source" Value="Exec|123" />
+      <Property Name="Element" Value="cntr_value" />
+      <Property Name="ElementName" Value="counter_name" />
+      <Property Name="ElementCount" Value="10" />
+      <Property Name="AlarmElement" Value="Temp Tables Creation Rate" />
+    </Action>
+
+    <Action Id="125" Type="SqlAlarm" Enabled="true" ClientExecute="true" Description="Query Database Return Xml" BreakOnError="true">
+      <Property Name="Source" Value="Exec|123" />
+      <Property Name="Element" Value="cntr_value" />
+      <Property Name="ElementName" Value="counter_name" />
+      <Property Name="ElementCount" Value="5" />
+      <Property Name="AlarmElement" Value="Active Temp Tables" />
+    </Action>
+
+    <Action Id="1" Type="ListProperties" Enabled="false" ClientExecute="false" Description="List all properties and extended values" BreakOnError="true" />
+
+    <Action Id="1" Type="GetCustomers" Enabled="false" ClientExecute="false" Description="Get all customers" BreakOnError="true" />
+
+    <Action Id="2" Type="ReturnXml" Enabled="false" ClientExecute="true" Description="xml result values" BreakOnError="true">
+      <Property Name="SearchUrl" Value="This is the output: {ExecutionRoot}" />
+      <Property Name="LaId" Value="1" />
+      <Property Name="IsThisTrue" Value="true" />
+      <Property Name="IHaveADate" Value="2014-09-14" />
+      <Property Name="IHaveSomeMoney" Value="1,1222" />
+      <Property Name="Customers" Value="Exec|GetCustomers" />
+    </Action>
+
+    <Action Id="777" Type="TestAppActionOne" Enabled="false" Description="List all properties and extended values" BreakOnError="false">
+      <Property Name="TestProp" Value="This is the output: {ExecutionRoot}" />
+    </Action>
+
+    <Action Id="999" Type="SendMail" Enabled="false" Description="asdasd" BreakOnError="true">
+      <Property Name="MailTemplate" Value="H4sIAAAAAAAEAK1WzXIaORC++yk62nLlEmbA4J9goJzYjr0Vspuy2aT2KM80g4xGmkgCQm3lXXKwD3mBXPawVZkH2lfY1owdAx672FQ4ICR1f+qv+2uJf//+p/Pk6PfDwZ9vj2HkUglv/3jZ//UQWC0M3zcPw/BocASngzd9aAX1Rhge/8aAjZzL2mE4m82CWTPQJgkHZ6H3boXWGRG5IHYx6210/JofkMe9DYBOio6D967hh4mYdtmhVg6Vqw3mGTKIylmXOfzoCsB9iEbcWHTdiRvW9tjjKOduLrESK7K29HXCSex1wnL8jqZ4il12ggoNd9osuB/qSPMyA++NcGjYqldh8Q6NFVotODbqzb2guVOaWx8ZOIpsJSCALMga8FfKTSJUG+pBPft4/3sfhoTbhsZWsTYQKdpPt+5b67u3ijXKl9WS3yE0fxRhH1KhaiMUychv7vjN76itH6K1Atm6g7QZV4GlZPkM1mKMNBWLkt6GiYrRSKEQSDBaatOGX+r0QVz0pDwtHfe0P4lEzOHEcPJ/6k07YVEp0mxYirZzoeM5DRlERNd2WdZgvW+fO2G2tLjFeqd4CZteEZugoxFM8ys51mmKCrhzYDAR1BskL4iF4oASp2ieVOBUg+dXBgo4U/oLJXWSKKESO8myRAxJmcG6aC8URadibihcyt7mxKIpIq+w7edfLSptYrLLaHVGP6vsKg86yb8asPn1iMJvr+vUCOAkvyaGkNEwza8NjDC1VKk2dKjxDQ67i1eQzQwfazlPM8FjpDpjyHodX/JbVEs1u29FtSYbugt4ryKKraUoWJ+y7bPOQFLqEuuAropiywemqlLfDODWC1KMH64bWJ3SCZQjbpBVQbUCeEnnxjHJRzxuuh3AaymiMS/jPrvTnZdcpctOAO9IrZfALGWIs2fAxtxhoo1ghZZZfpWq6uN2A3jDXcHRi6kwR0+qmPkQuJRLml9bpf25Z+GElGu3ySsvlngCmdEXElMYkwZoOqau52N/YefXiaaGnMJ5ZvLrBT1YMGJsubJTbkTC20v6eZFl9K7QzU7hO4xrtBdhGcKNhJYjaZL+LgyE9zZIh+fkYMck5SOuBEo40zb/op6dLZweLIt36xZt4+a441rKhVxoBj91uh0XiIHR1LAHvoIkF0lCr+iGh0wXeuLb5xAGQ39379b3aru70NiD589XGbUeofrK3FDt84mhNxGObeRv2p9CVpaYAZaYB3yI8SQq3oNqyo87PEi8SaxbsL39f4gP5gXt1/SfwFFjnBJXq39OjcclZjAqMQ+Kjg3k5UQlF/Nq4qs33w3EQeIhg0inFdzXVvRDnbjaX0WKvVV486CG5X/D/wAcnjqFgQoAAA==" />
+    </Action>
+
+    <Action Id="1" Type="InitDatabase" Enabled="false" Description="Drops (if exists) and creates database" BreakOnError="true" />
+
+    <Action Id="2" Type="RunScript" Enabled="false" Description="Run 'schema.sql' in database" BreakOnError="true">
+      <Property Name="ScriptFile" Value="{ScriptLocation}schema.sql" />
+    </Action>
+
+    <Action Id="3" Type="RunScript" Enabled="false" Description="Run 'testdata.01' in database" BreakOnError="true">
+      <Property Name="ScriptFile" Value="{ScriptLocation}testdata.01.sql" />
+    </Action>
+
+    <Action Id="4" Type="RunScript" Enabled="false" Description="Run 'EventCategoryData.sql' in database" BreakOnError="true">
+      <Property Name="ScriptFile" Value="{ScriptLocation}EventCategoryData.sql" />
+    </Action>
+
+    <Action Id="5" Type="RunScript" Enabled="false" Description="Run 'testdata.02.EventCategory.sql' in database" BreakOnError="true">
+      <Property Name="ScriptFile" Value="{ScriptLocation}testdata.02.EventCategory.sql" />
+    </Action>
+
+    <!--<Action Id="5" Type="Ftp" Enabled="true" Description="Test ftp task" BreakOnError="true">
+      <Property Name="FileName" Value="{GetCurrentFormatDateTimeString}" />
+      <Property Name="Directory" Value="C:\temp\af\Files\" />
+      <Property Name="ConnectionString" Value="Data Source=SHAREPOINT;Initial Catalog=WSS_Content_svpl_stretch_se_custom;Enlist=False;User ID=SvplDbUser;Password=1Nyfikenhet2Omtanke3Resultat!;Trusted_Connection=False; Connect Timeout=15" />
+      <Property Name="Query" Value="SELECT * FROM Users" />/>
+    </Action>-->
+
+    <Action Id="5" Type="SFTP" Enabled="false" Description="Test ftp task" BreakOnError="true">
+      <Property Name="FileName" Value="{GetCurrentFormatDateTimeString}" />
+      <Property Name="Directory" Value="C:\temp\af\Files\" />
+      <Property Name="ConnectionString" Value="Data Source=SHAREPOINT;Initial Catalog=WSS_Content_svpl_stretch_se_custom;Enlist=False;User ID=SvplDbUser;Password=1Nyfikenhet2Omtanke3Resultat!;Trusted_Connection=False; Connect Timeout=15" />
+      <Property Name="Query" Value="SELECT * FROM Users" />
+      <Property Name="Host" Value="192.36.203.62" />
+      <Property Name="Username" Value="sftp.minaplanertest" />
+      <Property Name="PrivateKey" Value="C:\temp\keys\testDEC.pem" />
+    </Action>
+
+  </Actions>
+
+</ActionFramework>

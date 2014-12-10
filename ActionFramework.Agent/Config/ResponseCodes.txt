@@ -1,0 +1,42 @@
+﻿-5:Extended parameter error
+-4:Network error
+-3:NACK (Not ACKnowledged)
+-2:Bad Contex
+-1:Response Timeout
+0:Missing information
+1:Checksum error
+2:Syntax error
+3:Operation not supported by system
+4:Operation not allowed
+5:Call barring active
+6:AdC invalid
+7:Authentication failure
+8:Legitimisation code for all calls, failure
+9:GA not valid
+10:Repetition not allowed
+11:Legitimisation code for repetition, failure
+12:Priority call not allowed
+13:Legitimisation code for priority call, failure
+14:Urgent message not allowed
+15:Legitimisation code for urgent message, failure
+16:Reverse charging not allowed
+17:Legitimisation code for rev. charging, failure
+18:Deferred delivery not allowed
+19:New AC not valid
+20:New legitimisation code not valid
+21:Standard text not valid
+22:Time period not valid
+23:Message type not supported by system
+24:Message too long
+25:Requested standard text not valid
+26:Message type not valid for the pager type
+27:Message not found in SMSC
+30:Subscriber hang-up
+31:Fax group not supported
+32:Fax message type not supported
+33:Address already in list (60 series)
+34:Address not in list (60 series)
+35:List full, cannot add address to list (60 series)
+36:RPID already in use
+37:Delivery in progress
+38:Message forwarded
