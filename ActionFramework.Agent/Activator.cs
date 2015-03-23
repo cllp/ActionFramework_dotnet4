@@ -28,7 +28,7 @@ namespace ActionFramework.Agent
         private static IActionList actionList = null;
         private static ActionResultLog actionResult;
         private static string runtime = string.Empty;
-        private static XDocument xmllog;
+        private static XDocument xmllog; 
 
         public static string RunActions(ActionListParameters par)
         {
