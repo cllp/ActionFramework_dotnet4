@@ -15,10 +15,10 @@ using ActionFramework.Interfaces;
 using ActionFramework.Agent.Context;
 using ActionFramework.Logging;
 using ActionFramework.Model;
-using FirebaseSharp.Portable;
 using RestSharp;
 using Newtonsoft.Json;
-using ActionFramework.DataSource;
+using ActionFramework.Agent.DataSource;
+using ActionFramework.Helpers;
 
 namespace ActionFramework.Agent
 {
@@ -28,7 +28,6 @@ namespace ActionFramework.Agent
         private static IActionList actionList = null;
         private static ActionResultLog actionResult;
         private static string runtime = string.Empty;
-        private static XDocument xmllog;
 
         public static string RunActions(ActionListParameters par)
         {
@@ -45,24 +44,46 @@ namespace ActionFramework.Agent
             }
             catch (Exception ex)
             {
+                systemlog.Add(new ExceptionLog(ex));
                 ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, "An error occured when runnign the actionlist. " + ex.Message + ". " + ex.StackTrace, Constants.EventLogId);
             }
             
-            WriteLog();
-            return xmllog.Root.ToString();
+            return WriteLog();
         }
 
-        private static void WriteLog()
+        public static object RunAction(IAction action)
+        {
+            return action.Execute();
+        }
+
+        private static string WriteLog()
         {
             systemlog.Add(actionResult);
             ActionFactory.CurrentLog().Add(systemlog);
 
-            xmllog = ActionFactory.CurrentLog().ToXml;
+            //todo 
+            //here I can serialize the list of elements and send the data in the LogModel
+            //on the server side I can deserialize the list of elememts and insert the logs to the database
+            //var elements = ActionFactory.CurrentLog().ListOfElements;
+            //test
+            //var bytes = ObjectSerializer.ToBytes<List<LogElements>>(ActionFactory.CurrentLog().ListOfElements);
+            //test to do it with json instead
 
-            string json = JsonConvert.SerializeXNode(xmllog.Root);
+            var log = ActionFactory.CurrentLog().WriteXml;
+
+            //clear the current log
+            ActionFactory.CurrentLog().ClearElements();
+
+            //string json = JsonConvert.SerializeXNode(xmllog.Root);
 
             //push the log to server
-            SaveActionLog(xmllog.Root.ToString());
+            var saveLogStatus = SaveActionLog(log);
+
+            //log to eventlogger
+            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, log, Constants.EventLogId);
+            
+            //log status of save to eventlogger
+            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "SaveLogStatus: " + saveLogStatus, Constants.EventLogId);
             
             //Firebase
             //string rootUri = "https://woxion01.firebaseio.com/";
@@ -71,7 +92,7 @@ namespace ActionFramework.Agent
             //string data = json;
             //fb.Post(path, data);
 
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, xmllog.Root.ToString(), Constants.EventLogId);
+            return log;
         }
 
         public static string GetNextRuntime()
@@ -155,7 +176,7 @@ namespace ActionFramework.Agent
             model.AgentId = AgentConfigurationContext.Current.AgentId;
             model.ActionFile = AgentConfigurationContext.Current.ActionFile;
             model.Description = "";
-            model.Data = ActionFactory.Compression.CompressString(xml);
+            model.XmlData = ActionFactory.Compression.CompressString(xml);
 
             var uri = AgentConfigurationContext.Current.ServerUrl + "/api/log/write/";
             
@@ -167,20 +188,6 @@ namespace ActionFramework.Agent
             var response = client.Execute(request);
 
             return response.StatusCode.ToString();
-
-            //RestHelper req = new RestHelper(AgentConfigurationContext.Current.ServerUrl + "/api/log/write/", Method.POST);
-            //req.RequestFormat = DataFormat.Json;
-            //req.AddBody(model);
-            //req.AddBody(new 
-            //        {
-            //            ActionFile = AgentConfigurationContext.Current.ActionFile,
-            //            AgentId = AgentConfigurationContext.Current.AgentId,
-            //            Data = ActionFactory.Compression.CompressString(xml),
-            //            Description = ""
-            //        }
-            //    );
-            //request.AddBody(new { A = "foo", B = "bar" })); // uses JsonSerializer
-            //return req.Execute().StatusCode.ToString();
         }
     }
 }

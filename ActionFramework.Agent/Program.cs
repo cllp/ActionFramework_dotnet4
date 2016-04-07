@@ -22,16 +22,19 @@ using System.Diagnostics.Eventing.Reader;
 using System.Xml.Linq;
 using System.IO;
 using ActionFramework.Model;
-using ActionFramework.DataSource;
+using ActionFramework.Agent.DataSource;
 using ActionFramework.Logging;
 using Microsoft.Owin.Hosting;
+using RestSharp;
+using ActionFramework.Helpers;
 
 namespace ActionFramework.Agent
 {
     class Program : ServiceBase
     {
         //public WebServiceHost webServiceHost = null;
-        FileSystemWatcher watcher;
+        static FileSystemWatcher watcher;
+        private static string agentUri;
 
         public Program()
         {
@@ -41,16 +44,23 @@ namespace ActionFramework.Agent
         static void Main(string[] args)
         {
             //owin console
-            using (WebApp.Start<Startup>(AgentConfigurationContext.Current.AgentUrl))
+            if (Connect())
             {
-                Console.WriteLine("url: " + AgentConfigurationContext.Current.AgentUrl);
-                Console.ReadLine();
-            }
+                using (WebApp.Start<Startup>(agentUri))
+                {
+                    Console.WriteLine("url: " + agentUri);
+                    InitializeTimer();
+                    InitializeWatcher(AgentConfigurationContext.Current.DropFolder);
+                    Console.WriteLine("Initialized Watcher on folder: " + AgentConfigurationContext.Current.DropFolder);
 
-            ServiceBase.Run(new Program());
+                    Console.ReadLine();
+                }
+
+                ServiceBase.Run(new Program());
+            }
         }
 
-        public void InitializeTimer()
+        public static void InitializeTimer()
         {
             //actionTimer = new System.Threading.Timer(new TimerCallback(actionTimer_Elapsed), null, 0, interval); //every two minutes http://csharptips.wordpress.com/tag/system-threading-timer/
             //TimerContext.Initialize(new System.Threading.Timer(new TimerCallback(actionTimer_Elapsed), null, 0, interval));
@@ -58,8 +68,10 @@ namespace ActionFramework.Agent
             TimerContext.Initialize(AgentConfigurationContext.Current.Interval);
         }
 
-        private void InitializeWatcher(string path)
+        private static void InitializeWatcher(string path)
         {
+            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Initialize Watcher on path: " + path, Constants.EventLogId);
+
             watcher = new FileSystemWatcher();
             watcher.Path = path;
             watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite
@@ -69,7 +81,7 @@ namespace ActionFramework.Agent
             watcher.EnableRaisingEvents = true;
         }
 
-        private void OnWatcherChanged(object source, FileSystemEventArgs e)
+        private static void OnWatcherChanged(object source, FileSystemEventArgs e)
         {
             ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Filewatcher Event. file: " + e.FullPath, Constants.EventLogId);
 
@@ -83,7 +95,7 @@ namespace ActionFramework.Agent
                 var par = new ActionListParameters();
 
                 //this is an action list dropped to file listener, thus this is going to be executed
-                if (e.FullPath.EndsWith(".xml")) //todo: more accurate check if action list
+                if (IsActionFile()) //todo: more accurate check if action list
                 {
                     dataSource = new XmlDataSource(XDocument.Load(e.FullPath).Root.ToString());
                 }
@@ -91,7 +103,7 @@ namespace ActionFramework.Agent
                 {
                     //the file is a resourcefile, get the datasource from server
                     dataSource = Activator.GetActionDataSource();
-                    
+
                     var resource = new ResourceParameter();
 
                     var ext = Path.GetExtension(e.FullPath).Replace(".", "");
@@ -103,12 +115,13 @@ namespace ActionFramework.Agent
                     resource.Origin = ResourceOrigin.FileWatcher;
                     resource.CompressedFile = ActionFactory.Compression.CompressFile(File.ReadAllBytes(resource.FilePath));
                     resource.Description = "Resource added from ";
+                    resource.FileContent = System.IO.File.ReadAllText(e.FullPath);
                     resource.LoadDate = DateTime.Now;
                     par.Add(resource);
                 }
 
                 par.DataSource = dataSource;
-                
+
                 Activator.RunActions(par);
 
                 try
@@ -131,21 +144,30 @@ namespace ActionFramework.Agent
             }
         }
 
+        private static bool IsActionFile()
+        {
+            return false;
+        }
+
         protected override void OnStart(string[] args)
         {
             //initiera service host
             //var uri = AgentConfigurationContext.Current.AgentUrl;
             //webServiceHost = new WebServiceHost(typeof(AgentService), new Uri(uri));
+            //agentUri = GetAgentUri();
+            if (Connect())
+            {
+                WebApp.Start<Startup>(agentUri);
 
-            WebApp.Start<Startup>(AgentConfigurationContext.Current.AgentUrl);
+                //var serviceEndPoint = new System.ServiceModel.Description.ServiceEndpoint()
+                //webServiceHost.AddServiceEndpoint(serviceEndPoint);
+                //webServiceHost.Open();
+                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Started and opened servicehost", Constants.EventLogId);
 
-            //var serviceEndPoint = new System.ServiceModel.Description.ServiceEndpoint()
-            //webServiceHost.AddServiceEndpoint(serviceEndPoint);
-            //webServiceHost.Open();
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Started and opened servicehost", Constants.EventLogId);
-
-            InitializeTimer();
-            InitializeWatcher(Path.Combine(AgentConfigurationContext.Current.ConfigurationPath, "Drop"));
+                InitializeTimer();
+                //InitializeWatcher(Path.Combine(AgentConfigurationContext.Current.ConfigurationPath, "Drop"));
+                InitializeWatcher(AgentConfigurationContext.Current.DropFolder);
+            }
         }
 
         protected override void OnStop()
@@ -154,13 +176,45 @@ namespace ActionFramework.Agent
             //webServiceHost = null;
         }
 
-        private void ArchiveWatcherFile(string path)
+        private static void ArchiveWatcherFile(string path)
         {
             string archivePath = Path.Combine(Path.GetDirectoryName(path), "Archive");
             if (!Directory.Exists(archivePath))
                 Directory.CreateDirectory(archivePath);
 
-            File.Move(path, Path.Combine(archivePath, Path.GetFileName(path)));
+            //add the current datetime to the filename.
+            string fileprefix = new GlobalActionFunctions().GetCurrentFormatDateTimeString();
+            string filename = fileprefix + "_" + Path.GetFileName(path);
+
+            File.Move(path, Path.Combine(archivePath, filename));
+        }
+
+        private static bool IsActionFile(string path)
+        {
+            //todo compare with schema if the file is an action file.
+            return false;
+        }
+
+        private static bool Connect()
+        {
+            var uri = AgentConfigurationContext.Current.ServerUrl + "/api/agent/uri/" + AgentConfigurationContext.Current.AgentId;
+            RestHelper rh = new RestHelper(uri, Method.GET);
+            var response = rh.Execute();
+            RestSharp.ResponseStatus status = response.ResponseStatus;
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            { 
+                agentUri = response.Content;
+                return true;
+            }
+            else
+            {
+                var msg = "An error occured while connecting to the server '" + AgentConfigurationContext.Current.ServerUrl + "'. Status: '" + response.ResponseStatus + "'. Code: '" + response.StatusCode + "'. AgentId: '" + AgentConfigurationContext.Current.AgentId + "'.";
+                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+                Console.WriteLine("Error: " + msg);
+                Console.ReadLine();
+                return false;
+            }
         }
     }
 }

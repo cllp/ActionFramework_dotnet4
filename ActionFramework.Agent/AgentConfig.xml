@@ -3,16 +3,12 @@
 
   <Configuration>
 
-    
-    <add key="AgentId" value="12345"/>
-    <add key="ServiceName" value="Agent Debug"/>
-    <add key="ServiceDescription" value="Agent Debug Description"/>
-    <add key="DisplayName" value="Agent Debug"/>
-    <add key="AgentUrl" value="http://localhost:1001" />
+    <add key="AgentId" value="33333"/>
     <add key="ServerUrl" value="http://localhost:12345" />
-    <add key="ActionFile" value="light.xml"/>
-    <add key="Interval" value="60000" />
-    <add key="Debug" value="true" />
+    <add key="ActionFile" value="test.xml"/>
+    <add key="DropFolder" value="C:\temp\drop\"/>
+    <add key="Interval" value="3600000" />
+    <add key="Debug" value="false" />
 
   </Configuration>
 

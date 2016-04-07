@@ -1,7 +1,7 @@
 ﻿using ActionFramework.Agent.Context;
 using ActionFramework.Classes;
 using ActionFramework.Context;
-using ActionFramework.DataSource;
+using ActionFramework.Agent.DataSource;
 using ActionFramework.Domain.Model;
 using ActionFramework.Domain.Model.EventLog;
 using ActionFramework.Interfaces;
@@ -35,8 +35,10 @@ namespace ActionFramework.Agent.Api
             }
             catch (Exception ex)
             {
+                var log = ActionFactory.CurrentLog().WriteXml;
                 var msg = "RunActions() caused an exception" + " " + ex.Message;
                 ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+
                 result = msg;
             }
 
@@ -47,7 +49,85 @@ namespace ActionFramework.Agent.Api
         }
 
         [HttpGet]
-        [Route("run/{name}")]
+        [Route("runaction/{name}")]
+        public HttpResponseMessage RunAction(string name)
+        {
+            object result = null;
+
+            try
+            {
+                IActionDataSource dataSource = Activator.GetActionDataSource();
+                IActionList actionList = new ActionList(dataSource);
+                dataSource.FillActions(actionList, Enum.ActionStatus.Enabled);
+                IAction action = actionList.Where(a => a.Type.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
+                if (action != null)
+                    result = action.Execute();
+                else
+                    result = string.Format("Could not find action { }", name);
+
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(result.ToString(), Encoding.UTF8, "text/html")
+                };
+
+                //todo: return object as json: "application/json"
+            }
+            catch (Exception ex)
+            {
+                var log = ActionFactory.CurrentLog().WriteXml;
+                var msg = string.Format("RunAction() method with parameter '{0}' caused an exception. Message: '{1}'", name, ex.Message);
+                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(msg, Encoding.UTF8, "text/html")
+                };
+            }
+
+
+        }
+
+        [HttpPost]
+        [Route("runaction")]
+        public HttpResponseMessage RunAction(object input, string name)
+        {
+            object result = null;
+
+            try
+            {
+                IActionDataSource dataSource = Activator.GetActionDataSource();
+                IActionList actionList = new ActionList(dataSource);
+                dataSource.FillActions(actionList, Enum.ActionStatus.Enabled);
+                IAction action = actionList.Where(a => a.Type.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
+                if (action != null)
+                    result = action.Execute(input);
+                else
+                    result = string.Format("Could not find action { }", name);
+
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(result.ToString(), Encoding.UTF8, "text/html")
+                };
+            }
+            catch (Exception ex)
+            {
+                var log = ActionFactory.CurrentLog().WriteXml;
+                var msg = string.Format("RunAction() method with parameter '{0}' caused an exception. Message: '{1}'", name, ex.Message);
+                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent(msg, Encoding.UTF8, "text/html")
+                };
+            }
+
+
+        }
+
+        [HttpGet]
+        [Route("runconfig/{name}")]
         public string RunConfiguration(string name)
         {
             try
@@ -188,6 +268,14 @@ namespace ActionFramework.Agent.Api
         public EventList GetEventLogInfo(string logName, string level, string eventId, string timeSpanStart, string timeSpanEnd, int max)
         {
             return ActionFactory.EventLogger().GetEventLogs(logName, level, eventId, timeSpanStart, timeSpanEnd, max);
+        }
+
+        [HttpGet]
+        [Route("host/eventlog")]
+        public EventList GetEventLogInfo(object filter)
+        {
+            throw new NotImplementedException();
+            //return ActionFactory.EventLogger().GetEventLogs(logName, level, eventId, timeSpanStart, timeSpanEnd, max);
         }
 
         [HttpGet]
