@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using ActionFramework.Enum;
 using ActionFramework.Interfaces;
+using RestSharp;
 
 namespace ActionFramework.Classes
 {
     public class AgentConfiguration : IAgentConfiguration
     {
-        
+
         private string configurationFile = "AgentConfig";
+        private string dropFolder = Path.Combine(GetDirectoryPath(), "Drop");
         private string configurationPath = GetDirectoryPath();
         //private DataSourceLocation dataSourceLocation = DataSourceLocation.Local;
         //private DataSourceFormat dataSourceFormat = DataSourceFormat.Simple;
@@ -27,17 +29,53 @@ namespace ActionFramework.Classes
             set { configurationFile = value; }
         }
 
+        public string DropFolder
+        {
+            get { return dropFolder; }
+            set { dropFolder = value; }
+        }
+
         public string ConfigurationPath
         {
             get { return configurationPath; }
         }
 
         public string AgentId { get; set; }
-        public string ServiceName { get; set; }
-        public string ServiceDescription { get; set; }
-        public string DisplayName { get; set; }
+        public string ServiceName
+        {
+            get
+            {
+                return "Agent " + AgentId;
+            }
+        }
+        public string ServiceDescription
+        {
+            get
+            {
+                return "ActionFramework Agent";
+            }
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                return "Agent " + AgentId;
+            }
+        }
+
         public string ServerUrl { get; set; }
-        public string AgentUrl { get; set; }
+        //public string AgentUrl { get; set; }
+        //public string AgentUrl
+        //{
+        //    get
+        //    {
+        //        var uri = ServerUrl + "/api/agent/uri/" + AgentId;
+        //        RestHelper rh = new RestHelper(uri, Method.GET);
+        //        var response = rh.Execute();
+        //        return response.Content;
+        //    }
+        //}
         //public string AgentCode { get; set; }
         //public string AgentSecret { get; set; }
         public string ActionFile { get; set; }
@@ -99,7 +137,7 @@ namespace ActionFramework.Classes
                 return false;
             }
         }
-        
+
         private void SetConfiguration()
         {
             string path = Path.Combine(configurationPath, configurationFile + ".xml");
@@ -108,16 +146,20 @@ namespace ActionFramework.Classes
             var settings = (from x in xDoc.Descendants("add") select x);
 
             AgentId = GetElementValue(settings, "AgentId");
-            ServiceName = GetElementValue(settings, "ServiceName");
-            ServiceDescription = GetElementValue(settings, "ServiceDescription");
-            DisplayName = GetElementValue(settings, "DisplayName");
+            //ServiceName =  //GetElementValue(settings, "ServiceName");
+            //ServiceDescription = "" + "";  GetElementValue(settings, "ServiceDescription");
+            //DisplayName = GetElementValue(settings, "DisplayName");
             //LogRemote = Convert.ToBoolean(GetElementValue(settings, "LogRemote"));
             //LogToDisk = Convert.ToBoolean(GetElementValue(settings, "LogToDisk"));
             //AgentCode = GetElementValue(settings, "AgentCode");
             //AgentSecret = GetElementValue(settings, "AgentSecret");
             ActionFile = GetElementValue(settings, "ActionFile");
             //WebApiUrl = GetElementValue(settings, "WebApiUrl");
-            AgentUrl = GetElementValue(settings, "AgentUrl");
+            //AgentUrl = GetAgentUrl();
+
+            if (!string.IsNullOrEmpty(GetElementValue(settings, "DropFolder")))
+                DropFolder = GetElementValue(settings, "DropFolder");
+
             ServerUrl = GetElementValue(settings, "ServerUrl");
             Interval = Convert.ToInt32(GetElementValue(settings, "Interval"));
             //DataSourceLocation = (DataSourceLocation)System.Enum.Parse(typeof(DataSourceLocation), GetElementValue(settings, "DataSourceLocation"));
@@ -126,6 +168,14 @@ namespace ActionFramework.Classes
 
             ActionFactory.EventLogger(ServiceName).Write(EventLogEntryType.Information, "Loaded agent configuration: " + path, Constants.EventLogId);
         }
+
+        //private string GetAgentUrl()
+        //{
+        //    var uri = ServerUrl + "/api/agent/uri/" + AgentId;
+        //    RestHelper rh = new RestHelper(uri, Method.GET);
+        //    var response = rh.Execute();
+        //    return response.Content;
+        //}
 
         private static string GetElementValue(IEnumerable<XElement> elements, string key)
         {

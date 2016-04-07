@@ -14,6 +14,7 @@ namespace ActionFramework.Model
         private DateTime loadDate = DateTime.Now;
         public string FileName { get; set; }
         public string FilePath { get; set; }
+        public string FileContent { get; set; }
         public ResourceFileType FileType { get; set; }
         public string FileExtension { get; set; }
         public ResourceOrigin Origin { get; set; }

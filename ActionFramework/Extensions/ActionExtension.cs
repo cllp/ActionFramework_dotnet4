@@ -22,7 +22,7 @@ namespace ActionFramework.Extensions
 
         public static List<Domain.Model.Action> GetActionAndProperties(this Assembly ass, App app)
         {
-            var actionTypes = ActionHelper.GetAssemblyActions(ass);
+            var actionTypes = ReflectionHelper.GetAssemblyActions(ass);
             List<Domain.Model.Action> dbActions = new List<Domain.Model.Action>();
             foreach (var a in actionTypes)
             {
@@ -58,7 +58,6 @@ namespace ActionFramework.Extensions
 
             return dbActions;
         }
-
 
         public static IAction CreateActionInstance(this IAction source)
         {

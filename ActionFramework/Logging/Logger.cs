@@ -34,188 +34,6 @@ namespace ActionFramework.Logging
             get { return listOfElements; }
         }
 
-        public string Write()
-        {
-            return Write(String.Empty, false);
-        }
-
-        public string Write(bool remote)
-        {
-            return Write(String.Empty, remote);
-        }
-
-        public string Write(string path)
-        {
-            return Write(path, false);
-        }
-
-        /// <summary>
-        /// saves the log to the given path
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public string Write(string path, bool remote)
-        {
-            XDocument log = CreateLogFile();
-            XElement rootElement = new XElement("Log");
-
-            foreach (var elements in listOfElements)
-            {
-                XElement x_elements = new XElement(elements.Type.ToString(), new XAttribute("Created", elements.Created));
-
-                if (elements.Action != null)
-                {
-                    x_elements.Add(new XAttribute("ActionId", elements.Action.Id));
-                    x_elements.Add(new XAttribute("ActionType", elements.Action.Type.Name));
-                    //x_elements.Add(new XAttribute("Assembly", new ApplicationInfo(Assembly.GetAssembly(elements.Action.GetType())).ToString()));
-
-
-
-                    var xml = JsonConvert.DeserializeXNode(SimpleJson.SerializeObject(new ApplicationInfo(Assembly.GetAssembly(elements.Action.GetType()))), "Assembly").Root;
-                    x_elements.Add(xml);
-                }
-
-                //if (!elements.Type.Equals(LogType.Xml.ToString()))
-                //    x_elements.Add(new XElement("Message", elements.Message));
-                //else
-                //    x_elements.Add(XElement.Parse(elements.Message)); //if value is xml
-
-                string actionId = "";
-
-                if (action != null)
-                    actionId = action.Id;
-
-                foreach (ILogElement e in elements)
-                {
-                    var type = e.GetType();
-                    var props = type.GetProperties();
-                    var typename = type.Name;
-                    XElement typeElement;
-
-                    if (typename.ToLower().EndsWith("log"))
-                        typename = typename.Substring(0, typename.Length - 3);
-
-                    if (type.Equals(typeof(InformationLog)))
-                    {
-                        typeElement = new XElement("Message");
-                        var prop = props.First();
-                        var name = prop.Name;
-                        var value = prop.GetValue(e, null);
-                        typeElement.Value = value.ToString();
-                    }
-                    else
-                    {
-                        string serialized = SimpleJson.SerializeObject(e);
-                        XDocument doc = JsonConvert.DeserializeXNode(serialized, typename);
-                        typeElement = doc.Root;
-
-                        //typeElement = new XElement(typename);
-                        //foreach (var prop in props)
-                        //{
-                        //    var name = prop.Name;
-                        //    var value = prop.GetValue(e, null);
-
-                        //    if (value != null)
-                        //        typeElement.Add(new XElement(name, value.ToString()));
-                        //}
-                    }
-
-                    x_elements.Add(typeElement);
-
-                    //if (!e.Name.Equals(LogType.Xml.ToString()))
-                    //    x_elements.Add(new XElement(e.Name, e.Value.ToString()));
-                    //else
-                    //    x_elements.Add(XElement.Parse(e.Value.ToString())); //if value is xml
-                }
-
-                rootElement.Add(x_elements);
-            }
-
-            XElement logs = log.Elements().First();
-            logs.Add(rootElement);
-
-            //if (remote)
-            //    WriteLog(logs.ToString(), LogDescription); //writes log to the api target
-
-            //clear all, so that elements wont be written twice
-            this.listOfElements.Clear();
-
-            if (!string.IsNullOrEmpty(path))
-            {
-                try
-                {
-                    log.Save(path);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-
-            return log.ToString();
-        }
-
-        //public void Add(string type, string message)
-        //{
-        //    bool found = false;
-        //    var elements = FindList(type, out found);
-        //    elements.Add(new InformationLog(message));
-
-        //    if (!found)
-        //        ListOfElements.Add(elements);
-        //}
-
-        //public void Add(LogType type, ILogElement log)
-        //{
-        //    bool found = false;
-        //    var elements = FindList(type, out found);
-        //    elements.Add(log);
-
-        //    if (!found)
-        //        ListOfElements.Add(elements);
-        //}
-
-        //public void Add(LogType type, Exception ex)
-        //{
-        //    bool found = false;
-        //    var elements = FindList(type, out found);
-        //    elements.Add(new ExceptionLog(ex));
-            
-        //    if (!found)
-        //        ListOfElements.Add(elements);
-        //}
-
-        //public void Add(LogType type, string message, Exception ex)
-        //{
-        //    bool found = false;
-        //    var elements = FindList(type, out found);
-        //    elements.Add(new InformationLog(message));
-        //    elements.Add(new ExceptionLog(ex));
-
-        //    if(!found)
-        //        ListOfElements.Add(elements);
-        //}
-
-        //public void Add(LogElements elements)
-        //{
-        //    //elements.Action = this.action;
-        //    //bool found = false;
-        //    //var elements = FindList(elements.Type, out found);
-
-        //    ListOfElements.Add(elements);
-        //}
-
-        //public void Add(string xml, string description)
-        //{
-        //    bool found = false;
-        //    var elements = FindList(LogType.Xml, out found);
-        //    elements.Add(new InformationLog(description));
-        //    elements.Add(new InformationLog(xml));
-            
-        //    if (!found)
-        //        ListOfElements.Add(elements);
-        //}
-
         private XDocument CreateLogFile()
         {
             XDocument doc = new XDocument(new XDeclaration("1.0", "iso-8859-1", "true"));
@@ -260,13 +78,19 @@ namespace ActionFramework.Logging
             return logtypes.Remove(logtypes.Length - 1, 1);
         }
 
-        private LogElements FindList(string type, out bool found)
+        private LogElements FindCurrentActionElements(string type, out bool found)
         {
             found = false;
             LogElements elements = ListOfElements.Find(e => e.Action.Id.Equals(this.Action.Id));
 
             if (elements == null)
-                elements = new LogElements(type, DateTime.Now, this.action);
+            {
+                //setting default Action to elements if the action is not null
+                if (this.action != null)
+                    elements = new LogElements("Action", DateTime.Now, this.action);
+                else
+                    elements = new LogElements(type, DateTime.Now, this.action);
+            }
             else
                 found = true;
 
@@ -276,7 +100,7 @@ namespace ActionFramework.Logging
         public void Info(string s)
         {
             bool found = false;
-            var elements = FindList(LogType.Information.ToString(), out found);
+            var elements = FindCurrentActionElements(LogType.Information.ToString(), out found);
             elements.Add(new InformationLog(s));
 
             if (!found)
@@ -286,7 +110,7 @@ namespace ActionFramework.Logging
         public void Warning(string s)
         {
             bool found = false;
-            var elements = FindList(LogType.Warning.ToString(), out found);
+            var elements = FindCurrentActionElements(LogType.Warning.ToString(), out found);
             elements.Add(new WarningLog(s));
 
             if (!found)
@@ -296,7 +120,7 @@ namespace ActionFramework.Logging
         public void Warning(string s, Exception ex)
         {
             bool found = false;
-            var elements = FindList(LogType.Warning.ToString(), out found);
+            var elements = FindCurrentActionElements(LogType.Warning.ToString(), out found);
             elements.Add(new WarningLog(s, ex));
 
             if (!found)
@@ -306,7 +130,7 @@ namespace ActionFramework.Logging
         public void Error(string s)
         {
             bool found = false;
-            var elements = FindList(LogType.Error.ToString(), out found);
+            var elements = FindCurrentActionElements(LogType.Error.ToString(), out found);
             elements.Add(new ExceptionLog(s));
 
             if (!found)
@@ -316,7 +140,7 @@ namespace ActionFramework.Logging
         public void Error(Exception ex)
         {
             bool found = false;
-            var elements = FindList(LogType.Error.ToString(), out found);
+            var elements = FindCurrentActionElements(LogType.Error.ToString(), out found);
             elements.Add(new ExceptionLog(ex));
 
             if (!found)
@@ -326,7 +150,7 @@ namespace ActionFramework.Logging
         public void Error(string s, Exception ex)
         {
             bool found = false;
-            var elements = FindList(LogType.Error.ToString(), out found);
+            var elements = FindCurrentActionElements(LogType.Error.ToString(), out found);
             elements.Add(new ExceptionLog(s, ex));
 
             if (!found)
@@ -336,7 +160,7 @@ namespace ActionFramework.Logging
         public void Custom(ILogElement log)
         {
             bool found = false;
-            var elements = FindList("Action", out found);
+            var elements = FindCurrentActionElements("Action", out found);
             elements.Add(log);
 
             if (!found)
@@ -348,14 +172,12 @@ namespace ActionFramework.Logging
             var xml = JsonConvert.DeserializeXNode(SimpleJson.SerializeObject(obj), obj.GetType().Name).Root;
 
             bool found = false;
-            var elements = FindList("Action", out found);
+            var elements = FindCurrentActionElements("Action", out found);
             elements.Add(new XmlLog(xml.ToString()));
 
             if (!found)
                 ListOfElements.Add(elements);
         }
-
-        
 
         //public void Custom(ILogElement log)
         //{
@@ -372,7 +194,13 @@ namespace ActionFramework.Logging
             ListOfElements.Add(elements);
         }
 
-        public XDocument ToXml
+        public void ClearElements()
+        {
+            //clear the log
+            this.listOfElements.Clear();
+        }
+
+        public string WriteXml
         {
             get
             {
@@ -387,10 +215,10 @@ namespace ActionFramework.Logging
                     {
                         x_elements.Add(new XAttribute("ActionId", elements.Action.Id));
                         x_elements.Add(new XAttribute("ActionType", elements.Action.Type.Name));
-                        //x_elements.Add(new XAttribute("Assembly", new ApplicationInfo(Assembly.GetAssembly(elements.Action.GetType())).ToString()));
+                        x_elements.Add(new XAttribute("Assembly", new ApplicationInfo(Assembly.GetAssembly(elements.Action.GetType())).ToString()));
 
-                        var xml = JsonConvert.DeserializeXNode(SimpleJson.SerializeObject(new ApplicationInfo(Assembly.GetAssembly(elements.Action.GetType()))), "Assembly").Root;
-                        x_elements.Add(xml);
+                        //var xml = JsonConvert.DeserializeXNode(SimpleJson.SerializeObject(new ApplicationInfo(Assembly.GetAssembly(elements.Action.GetType()))), "Assembly").Root;
+                        //x_elements.Add(xml);
                     }
 
                     string actionId = "";
@@ -398,7 +226,7 @@ namespace ActionFramework.Logging
                     if (action != null)
                         actionId = action.Id;
 
-                    foreach (ILogElement e in elements)
+                    foreach (ILogElement e in elements.Where(el => el != null))
                     {
                         var type = e.GetType();
                         var props = type.GetProperties();
@@ -457,7 +285,7 @@ namespace ActionFramework.Logging
                 string path = Path.Combine(ActionHelper.GetDirectoryPath(), "Logs");
                 string file = new GlobalActionFunctions().GetCurrentFormatDateTimeString() + ".xml";
 
-                if(!Directory.Exists(path))
+                if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
 
                 //removing empty elements
@@ -465,13 +293,127 @@ namespace ActionFramework.Logging
                         .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
                         .Remove();
 
-                log.Save(Path.Combine(path, file));
+                //log.Save(Path.Combine(path, file));
 
-                //clear the log
-                this.listOfElements.Clear();
+                //ClearElements();
 
-                return log;
+                return log.Root.ToString();
             }
         }
+
+        public string WriteJson
+        {
+            get
+            {
+                //todo create good json objects from the list of elements
+                throw new NotImplementedException();
+            }
+        }
+
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        ///// <returns></returns>
+        //public string Write()
+        //{
+        //    XDocument log = CreateLogFile();
+        //    XElement rootElement = new XElement("Log");
+
+        //    foreach (var elements in listOfElements)
+        //    {
+        //        XElement x_elements = new XElement(elements.Type.ToString(), new XAttribute("Created", elements.Created));
+
+        //        if (elements.Action != null)
+        //        {
+        //            x_elements.Add(new XAttribute("ActionId", elements.Action.Id));
+        //            x_elements.Add(new XAttribute("ActionType", elements.Action.Type.Name));
+
+        //            //short assembly info
+        //            x_elements.Add(new XAttribute("Assembly", new ApplicationInfo(Assembly.GetAssembly(elements.Action.GetType())).ToString()));
+
+        //            //full assembly info
+        //            //var xml = JsonConvert.DeserializeXNode(SimpleJson.SerializeObject(new ApplicationInfo(Assembly.GetAssembly(elements.Action.GetType()))), "Assembly").Root;
+        //            //x_elements.Add(xml);
+        //        }
+
+        //        //if (!elements.Type.Equals(LogType.Xml.ToString()))
+        //        //    x_elements.Add(new XElement("Message", elements.Message));
+        //        //else
+        //        //    x_elements.Add(XElement.Parse(elements.Message)); //if value is xml
+
+        //        string actionId = "";
+
+        //        if (action != null)
+        //            actionId = action.Id;
+
+        //        foreach (ILogElement e in elements)
+        //        {
+        //            var type = e.GetType();
+        //            var props = type.GetProperties();
+        //            var typename = type.Name;
+        //            XElement typeElement;
+
+        //            if (typename.ToLower().EndsWith("log"))
+        //                typename = typename.Substring(0, typename.Length - 3);
+
+        //            if (type.Equals(typeof(InformationLog)))
+        //            {
+        //                typeElement = new XElement("Message");
+        //                var prop = props.First();
+        //                var name = prop.Name;
+        //                var value = prop.GetValue(e, null);
+        //                typeElement.Value = value.ToString();
+        //            }
+        //            else
+        //            {
+        //                string serialized = SimpleJson.SerializeObject(e);
+        //                XDocument doc = JsonConvert.DeserializeXNode(serialized, typename);
+        //                typeElement = doc.Root;
+
+        //                //typeElement = new XElement(typename);
+        //                //foreach (var prop in props)
+        //                //{
+        //                //    var name = prop.Name;
+        //                //    var value = prop.GetValue(e, null);
+
+        //                //    if (value != null)
+        //                //        typeElement.Add(new XElement(name, value.ToString()));
+        //                //}
+        //            }
+
+        //            x_elements.Add(typeElement);
+
+        //            //if (!e.Name.Equals(LogType.Xml.ToString()))
+        //            //    x_elements.Add(new XElement(e.Name, e.Value.ToString()));
+        //            //else
+        //            //    x_elements.Add(XElement.Parse(e.Value.ToString())); //if value is xml
+        //        }
+
+        //        rootElement.Add(x_elements);
+        //    }
+
+        //    XElement logs = log.Elements().First();
+        //    logs.Add(rootElement);
+
+        //    //if (remote)
+        //    //    WriteLog(logs.ToString(), LogDescription); //writes log to the api target
+
+        //    //clear all, so that elements wont be written twice
+        //    this.listOfElements.Clear();
+
+        //    //if (!string.IsNullOrEmpty(path))
+        //    //{
+        //    //    try
+        //    //    {
+        //    //        log.Save(path);
+        //    //    }
+        //    //    catch (Exception ex)
+        //    //    {
+        //    //        throw ex;
+        //    //    }
+        //    //}
+
+        //    return log.ToString();
+        //}
     }
 }

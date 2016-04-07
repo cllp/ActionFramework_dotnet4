@@ -14,13 +14,15 @@ namespace ActionFramework.Interfaces
         string ConfigurationPath { get; }
 
         string AgentId { get; }
-        string ServiceName { get; set; }
-        string ServiceDescription { get; set; }
-        string DisplayName { get; set; }
+        string ServiceName { get; }
+        string ServiceDescription { get; }
+        string DisplayName { get; }
         //string WebApiUrl { get; set; }
         //string AgentUrl { get; set; }
-        string AgentUrl { get; set; }
+        //string AgentUrl { get; set; }
         string ServerUrl { get; set; }
+
+        string DropFolder { get; set; }
         //string AgentCode { get; set; }
         //string AgentSecret { get; set; }
         //DataSourceLocation DataSourceLocation { get; set; }
