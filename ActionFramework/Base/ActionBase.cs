@@ -236,30 +236,54 @@ namespace ActionFramework.Base
 
         public IAction FindActionByType(string type)
         {
+            var exceptionMessage = "Could not find action value with type: '" + type + "'. Ensure that it is in the configuration";
+
             try
             {
-                return this.ActionList.Where(a => a.Type.Name.Equals(type)).FirstOrDefault();
+
+                var action = this.ActionList.Where(a => a.Type.Name.Equals(type)).FirstOrDefault();
+
+                if (action != null)
+                { 
+                    return action;
+                }
+                else
+                { 
+                    throw new Exception(exceptionMessage);
+                }
                 //return this.DataSource.ActionList.Where(a => a.Type.Name.Equals(type)).FirstOrDefault();
             }
             catch (Exception ex)
             {
-                var msg = "Could not find action value with type: '" + type + "'. " + ex.Message;
-                Log.Error(new Exception(msg, ex.InnerException));
+               
+                Log.Error(new Exception(ex.Message, ex.InnerException));
                 throw ex;
             }
         }
 
         public IAction FindActionById(string id)
         {
+            var exceptionMessage = "Could not find action value with id: '" + id + "'. Ensure that it is in the configuration";
+
             try
             {
-                return this.ActionList.Where(a => a.Id.Equals(id)).FirstOrDefault();
+
+                var action = this.ActionList.Where(a => a.Id.Equals(id)).FirstOrDefault();
+
+                if (action != null)
+                {
+                    return action;
+                }
+                else
+                {
+                    throw new Exception(exceptionMessage);
+                }
                 //return this.DataSource.ActionList.Where(a => a.Type.Name.Equals(type)).FirstOrDefault();
             }
             catch (Exception ex)
             {
-                var msg = "Could not find action value with type: '" + type + "'. " + ex.Message;
-                Log.Error(new Exception(msg, ex.InnerException));
+
+                Log.Error(new Exception(ex.Message, ex.InnerException));
                 throw ex;
             }
         }

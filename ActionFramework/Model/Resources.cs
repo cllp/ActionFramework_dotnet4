@@ -1,4 +1,5 @@
-﻿using ActionFramework.Logging;
+﻿using ActionFramework.Domain.Model;
+using ActionFramework.Logging;
 using ActionFramework.Model;
 using System;
 using System.Collections.Generic;

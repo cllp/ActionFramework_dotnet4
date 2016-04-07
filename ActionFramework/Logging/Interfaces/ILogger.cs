@@ -29,15 +29,20 @@ namespace ActionFramework.Logging
         //void Add(LogType type, ILogElement log);
         //void Add(string xml, string description);
 
-        string Write();
+        void ClearElements();
 
-        string Write(bool remote);
+        //string Write(bool remote);
 
-        string Write(string path);
+        //string Write(string path);
 
-        string Write(string path, bool remote);
+        //string Write(string path, bool remote);
 
-        XDocument ToXml
+        string WriteXml
+        {
+            get;
+        }
+
+        string WriteJson
         {
             get;
         }

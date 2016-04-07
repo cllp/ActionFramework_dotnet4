@@ -22,7 +22,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\output\lib\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -60,34 +60,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Action\Build.cs" />
-    <Compile Include="Action\Ftp.cs" />
-    <Compile Include="Action\CopyFile.cs" />
-    <Compile Include="Action\CreateFolder.cs" />
-    <Compile Include="Action\ExecuteCommand.cs" />
-    <Compile Include="Action\ExecuteFile.cs" />
-    <Compile Include="Action\FileContentReplace.cs" />
-    <Compile Include="Action\ListProperties.cs" />
-    <Compile Include="Action\Log.cs" />
-    <Compile Include="Action\MergeXml.cs" />
-    <Compile Include="Action\MultipleFileContentReplace.cs" />
-    <Compile Include="Action\ReadRegistry.cs" />
-    <Compile Include="Action\InstallApp.cs" />
-    <Compile Include="Action\ReplaceFile.cs" />
-    <Compile Include="Action\SendMail.cs" />
-    <Compile Include="Action\ServiceHandler.cs" />
-    <Compile Include="Action\UnZipAction.cs" />
-    <Compile Include="Action\XmlReplace.cs" />
-    <Compile Include="Action\ZipAction.cs" />
     <Compile Include="Base\ActionBase.cs" />
     <Compile Include="ActionFactory.cs" />
     <Compile Include="Classes\ActionList.cs" />
-    <Compile Include="Classes\ActionHelper.cs" />
+    <Compile Include="Classes\Status.cs" />
+    <Compile Include="Helpers\ActionHelper.cs" />
+    <Compile Include="Helpers\ObjectSerializer.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Enum\ResourceOrigin.cs" />
     <Compile Include="Enum\LogType.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Enum\ParameterType.cs" />
+    <Compile Include="Extensions\ActionExtension.cs" />
+    <Compile Include="Extensions\ModelExtensions.cs" />
+    <Compile Include="Interfaces\IActionDataSource.cs" />
     <Compile Include="Model\ActionListParameters.cs" />
     <Compile Include="Model\ResourceParameter.cs" />
     <Compile Include="Classes\AgentConfiguration.cs" />
@@ -115,17 +102,13 @@
     <Compile Include="Logging\LogContext.cs" />
     <Compile Include="Model\EventLogs.cs" />
     <Compile Include="Logging\LogElements.cs" />
-    <Compile Include="DataSource\XmlDataSource.cs" />
     <Compile Include="Model\ActionProperty.cs" />
     <Compile Include="Logging\Logs\InformationLog.cs" />
     <Compile Include="Enum\DataSourceFormat.cs" />
     <Compile Include="Enum\DataSourceLocation.cs" />
     <Compile Include="Enum\ActionStatus.cs" />
     <Compile Include="Events\InitEventArgs.cs" />
-    <Compile Include="Extensions\ActionExtension.cs" />
-    <Compile Include="Extensions\ModelExtensions.cs" />
     <Compile Include="Interfaces\IAction.cs" />
-    <Compile Include="Interfaces\IActionDataSource.cs" />
     <Compile Include="Interfaces\IActionList.cs" />
     <Compile Include="Interfaces\ICommon.cs" />
     <Compile Include="Interfaces\ICompressor.cs" />
@@ -139,17 +122,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ActionFramework.Domain\ActionFramework.Domain.csproj">
+      <Project>{a7975db8-6cbc-4708-abd8-c5fc17400300}</Project>
+      <Name>ActionFramework.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Parameters\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ActionFramework.Domain\ActionFramework.Domain.csproj">
-      <Project>{a7975db8-6cbc-4708-abd8-c5fc17400300}</Project>
-      <Name>ActionFramework.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

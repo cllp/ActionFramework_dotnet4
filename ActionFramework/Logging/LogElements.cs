@@ -59,5 +59,9 @@ namespace ActionFramework.Logging
             this.created = created;
             this.action = action;
         }
+
+        public LogElements()
+        {
+        }
     }
 }

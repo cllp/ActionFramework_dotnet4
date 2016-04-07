@@ -48,7 +48,12 @@ namespace ActionFramework.DataSource
             {
                 try
                 {
-                    Type actionType = ActionHelper.GetActionType(actionTypes, ActionHelper.GetActionProperty(e, "Type").Value);
+                    var property = ActionHelper.GetActionProperty(e, "Type").Value;
+
+                    if(property == null)
+                        throw new Exception("Action Property '" + e.Name + "' could not be found");
+
+                    Type actionType = ActionHelper.GetActionType(actionTypes, property);
                     IAction action = (IAction)Activator.CreateInstance(actionType);
                     action.Id = e.Attribute("Id").Value;
                     action.Type = actionType;
