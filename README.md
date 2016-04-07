@@ -1,6 +1,6 @@
 # Action Framework #
 
-## Action Framework is an integration and orchestration platform that enables a simple process to develop, manage, monitor and extend systems, integrations and data flows in complex environments, all managed through a dashboard that gives administrators control of the infrastructure ##
+#### Action Framework is an integration and orchestration platform that enables a simple process to develop, manage, monitor and extend systems, integrations and data flows in complex environments, all managed through a dashboard that gives administrators control of the infrastructure ####
 
 
 * Action Framework enables analysis and monitoring of information that was previously very complex or maybe not even possible.
