@@ -12,6 +12,7 @@ namespace ActionFramework.Domain.Model.Api
         public string AgentId { get; set; }
         public string ActionFile { get; set; }
         public string Description { get; set; }
-        public string Data { get; set; }
+        public string XmlData { get; set; }
+        public string JsonData { get; set; }
     }
 }
