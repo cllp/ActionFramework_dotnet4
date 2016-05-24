@@ -3,12 +3,14 @@
 
   <Configuration>
 
-    <add key="AgentId" value="33333"/>
-    <add key="ServerUrl" value="http://localhost:12345" />
+    <add key="AgentId" value="12345"/>
+    <add key="ServerUrl" value="http://localhost:112" />
+    <add key="LocalUrl" value="http://localhost:111" />
     <add key="ActionFile" value="test.xml"/>
     <add key="DropFolder" value="C:\temp\drop\"/>
     <add key="Interval" value="3600000" />
     <add key="Debug" value="false" />
+    <add key="RunMode" value="Local" /> <!--Local / Remote -->
 
   </Configuration>
 

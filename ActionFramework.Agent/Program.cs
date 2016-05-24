@@ -52,6 +52,8 @@ namespace ActionFramework.Agent
                     InitializeTimer();
                     InitializeWatcher(AgentConfigurationContext.Current.DropFolder);
                     Console.WriteLine("Initialized Watcher on folder: " + AgentConfigurationContext.Current.DropFolder);
+                    Console.WriteLine("Runmode: " + AgentConfigurationContext.Current.Mode.ToString());
+                    Console.WriteLine("Directory: " + AgentConfigurationContext.Current.DirectoryPath);
 
                     Console.ReadLine();
                 }
@@ -197,23 +199,31 @@ namespace ActionFramework.Agent
 
         private static bool Connect()
         {
-            var uri = AgentConfigurationContext.Current.ServerUrl + "/api/agent/uri/" + AgentConfigurationContext.Current.AgentId;
-            RestHelper rh = new RestHelper(uri, Method.GET);
-            var response = rh.Execute();
-            RestSharp.ResponseStatus status = response.ResponseStatus;
+            if (AgentConfigurationContext.Current.Mode == RunMode.Remote)
+            {
+                var uri = AgentConfigurationContext.Current.ServerUrl + "/api/agent/uri/" + AgentConfigurationContext.Current.AgentId;
+                RestHelper rh = new RestHelper(uri, Method.GET);
+                var response = rh.Execute();
+                RestSharp.ResponseStatus status = response.ResponseStatus;
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-            { 
-                agentUri = response.Content;
-                return true;
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    agentUri = response.Content;
+                    return true;
+                }
+                else
+                {
+                    var msg = "An error occured while connecting to the server '" + AgentConfigurationContext.Current.ServerUrl + "'. Status: '" + response.ResponseStatus + "'. Code: '" + response.StatusCode + "'. AgentId: '" + AgentConfigurationContext.Current.AgentId + "'.";
+                    ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+                    Console.WriteLine("Error: " + msg);
+                    Console.ReadLine();
+                    return false;
+                }
             }
             else
             {
-                var msg = "An error occured while connecting to the server '" + AgentConfigurationContext.Current.ServerUrl + "'. Status: '" + response.ResponseStatus + "'. Code: '" + response.StatusCode + "'. AgentId: '" + AgentConfigurationContext.Current.AgentId + "'.";
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
-                Console.WriteLine("Error: " + msg);
-                Console.ReadLine();
-                return false;
+                agentUri = AgentConfigurationContext.Current.LocalUrl;
+                return true;
             }
         }
     }

@@ -17,6 +17,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Newtonsoft.Json;
 
 namespace ActionFramework.Agent.Api
 {
@@ -66,10 +67,16 @@ namespace ActionFramework.Agent.Api
                 else
                     result = string.Format("Could not find action { }", name);
 
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(result.ToString(), Encoding.UTF8, "text/html")
-                };
+                string jsonResult = JsonConvert.SerializeObject(result);
+                HttpResponseMessage response = this.Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StringContent(jsonResult, Encoding.UTF8, "application/json");
+                return response;
+
+
+                //return new HttpResponseMessage(HttpStatusCode.OK)
+                //{
+                //    Content = new StringContent(result.ToString(), Encoding.UTF8, "text/html")
+                //};
 
                 //todo: return object as json: "application/json"
             }
@@ -84,8 +91,6 @@ namespace ActionFramework.Agent.Api
                     Content = new StringContent(msg, Encoding.UTF8, "text/html")
                 };
             }
-
-
         }
 
         [HttpPost]
@@ -106,10 +111,15 @@ namespace ActionFramework.Agent.Api
                 else
                     result = string.Format("Could not find action { }", name);
 
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(result.ToString(), Encoding.UTF8, "text/html")
-                };
+                string jsonResult = JsonConvert.SerializeObject(result);
+                HttpResponseMessage response = this.Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StringContent(jsonResult, Encoding.UTF8, "application/json");
+                return response;
+
+                //return new HttpResponseMessage(HttpStatusCode.OK)
+                //{
+                //    Content = new StringContent(result.ToString(), Encoding.UTF8, "text/html")
+                //};
             }
             catch (Exception ex)
             {

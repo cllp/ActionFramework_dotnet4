@@ -64,6 +64,7 @@
     <Compile Include="ActionFactory.cs" />
     <Compile Include="Classes\ActionList.cs" />
     <Compile Include="Classes\Status.cs" />
+    <Compile Include="Enum\RunMode.cs" />
     <Compile Include="Helpers\ActionHelper.cs" />
     <Compile Include="Helpers\ObjectSerializer.cs" />
     <Compile Include="Helpers\ReflectionHelper.cs" />

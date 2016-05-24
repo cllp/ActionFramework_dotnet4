@@ -19,6 +19,7 @@ using RestSharp;
 using Newtonsoft.Json;
 using ActionFramework.Agent.DataSource;
 using ActionFramework.Helpers;
+using ActionFramework.Agent.LogWriter;
 
 namespace ActionFramework.Agent
 {
@@ -39,7 +40,11 @@ namespace ActionFramework.Agent
             try
             {
                 actionList = ActionFactory.ActionList(par);
-                systemlog.Add(new InformationLog(string.Format("ActionList Initiated. Using {0} server url.", AgentConfigurationContext.Current.ServerUrl)));
+                if (AgentConfigurationContext.Current.Mode == RunMode.Remote)
+                    systemlog.Add(new InformationLog(string.Format("ActionList Initiated. Using {0} server url.", AgentConfigurationContext.Current.ServerUrl)));
+                else
+                    systemlog.Add(new InformationLog(string.Format("ActionList Initiated. Using {0} local url.", AgentConfigurationContext.Current.LocalUrl)));
+
                 actionResult = actionList.Run(out runtime);
             }
             catch (Exception ex)
@@ -47,7 +52,7 @@ namespace ActionFramework.Agent
                 systemlog.Add(new ExceptionLog(ex));
                 ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, "An error occured when runnign the actionlist. " + ex.Message + ". " + ex.StackTrace, Constants.EventLogId);
             }
-            
+
             return WriteLog();
         }
 
@@ -81,10 +86,10 @@ namespace ActionFramework.Agent
 
             //log to eventlogger
             ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, log, Constants.EventLogId);
-            
+
             //log status of save to eventlogger
             ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "SaveLogStatus: " + saveLogStatus, Constants.EventLogId);
-            
+
             //Firebase
             //string rootUri = "https://woxion01.firebaseio.com/";
             //Firebase fb = new Firebase(rootUri);
@@ -155,11 +160,39 @@ namespace ActionFramework.Agent
         {
             var configId = AgentConfigurationContext.Current.ActionFile;
             var agentId = AgentConfigurationContext.Current.AgentId;
-            var uri = string.Format("{0}/{1}/{2}/{3}", AgentConfigurationContext.Current.ServerUrl, "/api/agent/config/", agentId, configId);
+            var xml = string.Empty;
 
-            RestHelper client = new RestHelper(uri, RestSharp.Method.GET);
-            var result = client.Execute();
-            var xml = ActionFactory.Compression.DecompressString(result.Content);
+            if (AgentConfigurationContext.Current.Mode == RunMode.Remote)
+            {
+                //var uri = string.Format("{0}/{1}/{2}/{3}", AgentConfigurationContext.Current.ServerUrl, "/api/agent/config/", agentId, configId);
+               
+                //RestHelper client = new RestHelper(uri, RestSharp.Method.GET);
+                //var result = client.Execute();
+                //xml = ActionFactory.Compression.DecompressString(result.Content);
+
+                //do this
+
+                var postclient = new RestClient(AgentConfigurationContext.Current.ServerUrl);
+                var postrequest = new RestRequest("api/agent/runaction?name=getconfig", Method.POST);
+                postrequest.RequestFormat = DataFormat.Json;
+
+                var body = new object[2];
+                body[0] = "12345";
+                body[1] = "test.xml";
+
+                postrequest.AddBody(body);
+
+                var postresponse = postclient.Execute(postrequest);
+                xml = ActionFactory.Compression.DecompressString(postresponse.Content);
+            }
+            else
+            {
+                //TODO: IMPÅLEMENT LOCAL CONFIG FILE
+                var path = Path.Combine(AgentConfigurationContext.Current.DirectoryPath, "Config");
+                xml = XDocument.Load(Path.Combine(path, AgentConfigurationContext.Current.ActionFile)).ToString();
+                //xml = 
+            }
+
             return new XmlDataSource(xml);
             //var par = new ActionListParameters(ds);
 
@@ -178,16 +211,27 @@ namespace ActionFramework.Agent
             model.Description = "";
             model.XmlData = ActionFactory.Compression.CompressString(xml);
 
-            var uri = AgentConfigurationContext.Current.ServerUrl + "/api/log/write/";
-            
-            var request = new RestRequest(Method.POST);
-            request.RequestFormat = DataFormat.Json; // Or DataFormat.Xml, if you prefer
-            request.AddObject(model);
+            if (AgentConfigurationContext.Current.Mode == RunMode.Remote)
+            {
+                var uri = AgentConfigurationContext.Current.ServerUrl + "/api/log/write/";
 
-            var client = new RestClient(uri);
-            var response = client.Execute(request);
+                var request = new RestRequest(Method.POST);
+                request.RequestFormat = DataFormat.Json; // Or DataFormat.Xml, if you prefer
+                request.AddObject(model);
 
-            return response.StatusCode.ToString();
+                var client = new RestClient(uri);
+                var response = client.Execute(request);
+
+                return response.StatusCode.ToString();
+
+            }
+            else
+            {
+                ILogWriter xmlLogWriter = new XmlLogWriter();
+                xmlLogWriter.model = model;
+                xmlLogWriter.Path = Path.Combine(AgentConfigurationContext.Current.DirectoryPath) + @"\Logs\";
+                return xmlLogWriter.Write;
+            }
         }
     }
 }

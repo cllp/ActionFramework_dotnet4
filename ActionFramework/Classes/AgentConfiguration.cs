@@ -22,6 +22,7 @@ namespace ActionFramework.Classes
         //private DataSourceLocation dataSourceLocation = DataSourceLocation.Local;
         //private DataSourceFormat dataSourceFormat = DataSourceFormat.Simple;
         private bool debug = false;
+        private RunMode mode = RunMode.Local;
 
         public string ConfigurationFile
         {
@@ -65,6 +66,7 @@ namespace ActionFramework.Classes
         }
 
         public string ServerUrl { get; set; }
+        public string LocalUrl { get; set; }
         //public string AgentUrl { get; set; }
         //public string AgentUrl
         //{
@@ -83,6 +85,10 @@ namespace ActionFramework.Classes
         //public bool LogRemote { get; set; }
         public int Interval { get; set; }
 
+
+        public string DirectoryPath { get { return GetDirectoryPath(); } }
+        
+
         //public DataSourceLocation DataSourceLocation
         //{
         //    get { return dataSourceLocation; }
@@ -99,6 +105,12 @@ namespace ActionFramework.Classes
         {
             get { return debug; }
             set { debug = value; }
+        }
+
+        public RunMode Mode
+        {
+            get { return mode; }
+            set { mode = value; }
         }
 
         public AgentConfiguration()
@@ -161,6 +173,8 @@ namespace ActionFramework.Classes
                 DropFolder = GetElementValue(settings, "DropFolder");
 
             ServerUrl = GetElementValue(settings, "ServerUrl");
+            LocalUrl = GetElementValue(settings, "LocalUrl");
+            Mode = (RunMode)System.Enum.Parse(typeof(RunMode), GetElementValue(settings, "RunMode"));
             Interval = Convert.ToInt32(GetElementValue(settings, "Interval"));
             //DataSourceLocation = (DataSourceLocation)System.Enum.Parse(typeof(DataSourceLocation), GetElementValue(settings, "DataSourceLocation"));
             //DataSourceFormat = (DataSourceFormat)System.Enum.Parse(typeof(DataSourceFormat), GetElementValue(settings, "DataSourceFormat"));

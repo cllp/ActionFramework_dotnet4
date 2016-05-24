@@ -21,6 +21,7 @@ namespace ActionFramework.Interfaces
         //string AgentUrl { get; set; }
         //string AgentUrl { get; set; }
         string ServerUrl { get; set; }
+        string LocalUrl { get; set; }
 
         string DropFolder { get; set; }
         //string AgentCode { get; set; }
@@ -31,9 +32,12 @@ namespace ActionFramework.Interfaces
         //bool LogToDisk { get; set; }
         //bool LogRemote { get; set; }
         bool Debug { get; set; }
+        RunMode Mode { get; set; }
         //DateTime LastRunDate { get; set; }
         int Interval { get; set; }
 
         bool UpdateSetting(string key, object value);
+
+        string DirectoryPath { get; }
     }
 }

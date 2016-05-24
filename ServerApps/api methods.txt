@@ -1,0 +1,10 @@
+﻿--- Agent
+GET http://{host}/api/agent/list
+GET http://{host}/api/agent/uri/{agentid}
+GET http://{host}/api/agent/{agent}/{file}
+GET http://{host}/api/run/{agent}
+GET http://{host}/api/getserverinfo/{uri}
+GET http://{host}/api/getagent/{id}
+GET http://{host}/api/getagents
+GET http://{host}/api/getapps/{agentid}
+GET http://{host}/api/getagentschedule/{uri}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ActionFramework>
+
+  <Settings>
+
+    <Setting Name="KeepClientWindow" Value="true" />
+    <Setting Name="ExecutionRoot" Value="Invoke|GetExecutionParentRoot" />
+    <Setting Name="SourceRootFolder" Value="{ExecutionRoot}source\" />
+    <Setting Name="ConnectionString" Value="Data Source=.;Database=ActionFramework;Persist Security Info=True;Trusted_Connection=true;Pooling=False" />
+    <Setting Name="GetCurrentFormatDateTimeString" Value="Invoke|GetCurrentFormatDateTimeString" />
+    <Setting Name="LogFile" Value="{ExecutionRoot}Logs\{GetCurrentFormatDateTimeString}.log.xml" />
+    <Setting Name="ScriptLocation" Value="C:\Source\Stratiteq\SCP\Main\Source\Database\" />
+
+  </Settings>
+
+  <Actions>
+
+    <Action Id="1" Type="Status" Enabled="true" ClientExecute="true" Description="Check AF Status" BreakOnError="true" />
+    <Action Id="2" Type="ListAgents" Enabled="true" ClientExecute="false" Description="List agents" BreakOnError="true" />
+    <Action Id="3" Type="GetConfig" Enabled="true" ClientExecute="false" Description="Get agent configuration" BreakOnError="true" />
+
+    
+    <Action Id="2" Type="DemoAction1" Enabled="false" ClientExecute="false" Description="Demonstrate" BreakOnError="true">
+      <Property Name="ConfigLog" Value="{ConnectionString}" />
+    </Action>
+    
+    <Action Id="3" Type="FrontlineFileReader" Enabled="false" ClientExecute="true" Description="Demonstrate" BreakOnError="true">
+      <Property Name="Receiver" Value="Test" />
+      <Property Name="ReceiverLocation" Value="Berberati" />
+    </Action>
+
+
+  </Actions>
+
+</ActionFramework>

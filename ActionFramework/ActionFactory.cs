@@ -11,7 +11,6 @@ using ActionFramework.Logging;
 using System.IO;
 using ActionFramework.Model;
 
-
 namespace ActionFramework
 {
     public class ActionFactory
