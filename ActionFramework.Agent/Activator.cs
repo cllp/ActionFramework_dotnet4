@@ -19,7 +19,6 @@ using RestSharp;
 using Newtonsoft.Json;
 using ActionFramework.Agent.DataSource;
 using ActionFramework.Helpers;
-using ActionFramework.Agent.LogWriter;
 
 namespace ActionFramework.Agent
 {
@@ -158,45 +157,35 @@ namespace ActionFramework.Agent
         /// <returns></returns>
         public static IActionDataSource GetActionDataSource()
         {
-            var configId = AgentConfigurationContext.Current.ActionFile;
+            var actionFile = AgentConfigurationContext.Current.ActionFile;
             var agentId = AgentConfigurationContext.Current.AgentId;
             var xml = string.Empty;
 
             if (AgentConfigurationContext.Current.Mode == RunMode.Remote)
             {
-                //var uri = string.Format("{0}/{1}/{2}/{3}", AgentConfigurationContext.Current.ServerUrl, "/api/agent/config/", agentId, configId);
-               
-                //RestHelper client = new RestHelper(uri, RestSharp.Method.GET);
-                //var result = client.Execute();
-                //xml = ActionFactory.Compression.DecompressString(result.Content);
-
-                //do this
-
                 var postclient = new RestClient(AgentConfigurationContext.Current.ServerUrl);
                 var postrequest = new RestRequest("api/agent/runaction?name=getconfig", Method.POST);
                 postrequest.RequestFormat = DataFormat.Json;
 
                 var body = new object[2];
-                body[0] = "12345";
-                body[1] = "test.xml";
+                body[0] = agentId;
+                body[1] = actionFile; //TODO: check if .xml should be present "test.xml";
 
                 postrequest.AddBody(body);
 
                 var postresponse = postclient.Execute(postrequest);
                 xml = ActionFactory.Compression.DecompressString(postresponse.Content);
+
             }
             else
             {
-                //TODO: IMPÅLEMENT LOCAL CONFIG FILE
-                var path = Path.Combine(AgentConfigurationContext.Current.DirectoryPath, "Config");
-                xml = XDocument.Load(Path.Combine(path, AgentConfigurationContext.Current.ActionFile)).ToString();
-                //xml = 
+                //read xml from disk
+                var path = string.Format("{0}/{1}/{2}/{3}/{4}", AppDomain.CurrentDomain.BaseDirectory, "Agents", agentId, "Configuration", actionFile);
+                var doc = XDocument.Load(path);
+                xml = doc.ToString();
             }
 
             return new XmlDataSource(xml);
-            //var par = new ActionListParameters(ds);
-
-            //return ActionFactory.ActionList(par);
         }
 
         /// <summary>
@@ -205,32 +194,39 @@ namespace ActionFramework.Agent
         /// <returns></returns>
         public static string SaveActionLog(string xml)
         {
-            var model = new ActionFramework.Domain.Model.Api.LogModel();
-            model.AgentId = AgentConfigurationContext.Current.AgentId;
-            model.ActionFile = AgentConfigurationContext.Current.ActionFile;
-            model.Description = "";
-            model.XmlData = ActionFactory.Compression.CompressString(xml);
+            //var model = new ActionFramework.Domain.Model.Api.LogModel();
+            //model.AgentId = AgentConfigurationContext.Current.AgentId;
+            //model.ActionFile = AgentConfigurationContext.Current.ActionFile;
+            //model.Description = "";
+            //model.XmlData = ActionFactory.Compression.CompressString(xml);
 
             if (AgentConfigurationContext.Current.Mode == RunMode.Remote)
             {
-                var uri = AgentConfigurationContext.Current.ServerUrl + "/api/log/write/";
+                //var uri = AgentConfigurationContext.Current.ServerUrl + "/api/log/write/";
+                var postclient = new RestClient(AgentConfigurationContext.Current.ServerUrl);
+                var postrequest = new RestRequest("api/agent/runaction?name=writelog", Method.POST);
+                postrequest.RequestFormat = DataFormat.Json;
 
-                var request = new RestRequest(Method.POST);
-                request.RequestFormat = DataFormat.Json; // Or DataFormat.Xml, if you prefer
-                request.AddObject(model);
+                var body = new object[2];                
+                body[0] = ActionFactory.Compression.CompressString(xml); //compressed xml
+                body[1] = AgentConfigurationContext.Current.AgentId; //agentId
 
-                var client = new RestClient(uri);
-                var response = client.Execute(request);
+                postrequest.AddBody(body);
 
+                var response = postclient.Execute(postrequest);
                 return response.StatusCode.ToString();
-
             }
             else
             {
-                ILogWriter xmlLogWriter = new XmlLogWriter();
-                xmlLogWriter.model = model;
-                xmlLogWriter.Path = Path.Combine(AgentConfigurationContext.Current.DirectoryPath) + @"\Logs\";
-                return xmlLogWriter.Write;
+                //ILogWriter xmlLogWriter = new XmlLogWriter();
+                //xmlLogWriter.model = model;
+                //xmlLogWriter.Path = Path.Combine(AgentConfigurationContext.Current.DirectoryPath) + @"\Logs\";
+                //return xmlLogWriter.Write;
+
+                string file = new GlobalActionFunctions().GetCurrentFormatDateTimeString() + ".xml";
+                var path = Path.Combine(AgentConfigurationContext.Current.DirectoryPath) + @"\Agents\" + AgentConfigurationContext.Current.AgentId + @"\Logs\";
+                File.WriteAllText(path + file, xml, Encoding.UTF8);
+                return "OK";
             }
         }
     }

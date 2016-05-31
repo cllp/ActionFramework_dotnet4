@@ -4,7 +4,7 @@
   <Configuration>
 
     <add key="AgentId" value="12345"/>
-    <add key="ServerUrl" value="http://localhost:112" />
+    <add key="ServerUrl" value="http://localhost:111" />
     <add key="LocalUrl" value="http://localhost:111" />
     <add key="ActionFile" value="test.xml"/>
     <add key="DropFolder" value="C:\temp\drop\"/>

@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="GetConfig.cs" />
     <Compile Include="GetAgentUri.cs" />
+    <Compile Include="WriteLog.cs" />
     <Compile Include="ListAgents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
