@@ -49,10 +49,16 @@ namespace ActionFramework.Agent
                 using (WebApp.Start<Startup>(agentUri))
                 {
                     Console.WriteLine("url: " + agentUri);
+                    //ActionFactory.InitializeLog();
+
                     InitializeTimer();
+                   
                     InitializeWatcher(AgentConfigurationContext.Current.DropFolder);
+                    Console.WriteLine("AgentId: " + AgentConfigurationContext.Current.AgentId);
+                    Console.WriteLine("Default interval schedule: " + AgentConfigurationContext.Current.Interval.ToString());
                     Console.WriteLine("Initialized Watcher on folder: " + AgentConfigurationContext.Current.DropFolder);
                     Console.WriteLine("Runmode: " + AgentConfigurationContext.Current.Mode.ToString());
+                    Console.WriteLine("ActionFile: " + AgentConfigurationContext.Current.ActionFile);
                     Console.WriteLine("Directory: " + AgentConfigurationContext.Current.DirectoryPath);
 
                     Console.ReadLine();
@@ -199,12 +205,21 @@ namespace ActionFramework.Agent
 
         private static bool Connect()
         {
+            //always start an agent on the local uri from own configuration
+            agentUri = AgentConfigurationContext.Current.LocalUrl;
+            return true;
+
             if (AgentConfigurationContext.Current.Mode == RunMode.Remote)
             {
-                var uri = AgentConfigurationContext.Current.ServerUrl + "/api/agent/uri/" + AgentConfigurationContext.Current.AgentId;
-                RestHelper rh = new RestHelper(uri, Method.GET);
-                var response = rh.Execute();
-                RestSharp.ResponseStatus status = response.ResponseStatus;
+                //var uri = AgentConfigurationContext.Current.ServerUrl + "/api/agent/uri/" + AgentConfigurationContext.Current.AgentId;
+                //RestHelper rh = new RestHelper(uri, Method.GET);
+                //var response = rh.Execute();
+                //RestSharp.ResponseStatus status = response.ResponseStatus;
+
+                //GET:
+                var client = new RestClient(AgentConfigurationContext.Current.ServerUrl);
+                var request = new RestRequest("/api/agent/runaction/getagenturi", Method.GET);
+                var response = client.Execute(request);
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {

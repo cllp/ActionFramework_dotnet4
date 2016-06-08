@@ -25,7 +25,7 @@ namespace ServerApps
             var agentId = obj[1].ToString();
 
             string file = new GlobalActionFunctions().GetCurrentFormatDateTimeString() + ".xml";
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Agents", agentId.ToString());
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Agents", agentId.ToString(), "Logs");
             File.WriteAllText(path + file, xml, Encoding.UTF8);
 
             return "Log saved successfully";

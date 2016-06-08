@@ -36,8 +36,9 @@ namespace ActionFramework.Agent.Api
             }
             catch (Exception ex)
             {
-                var log = ActionFactory.CurrentLog().WriteXml;
+                
                 var msg = "RunActions() caused an exception" + " " + ex.Message;
+                var log = ActionFactory.CurrentLog().WriteXml;
                 ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
 
                 result = msg;
@@ -57,15 +58,12 @@ namespace ActionFramework.Agent.Api
 
             try
             {
-                IActionDataSource dataSource = Activator.GetActionDataSource();
-                IActionList actionList = new ActionList(dataSource);
-                dataSource.FillActions(actionList, Enum.ActionStatus.Enabled);
-                IAction action = actionList.Where(a => a.Type.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                IAction action = Activator.FindAction(name);
 
                 if (action != null)
                     result = action.Execute();
                 else
-                    result = string.Format("Could not find action { }", name);
+                    result = string.Format("Could not find action {0}", name);
 
                 string jsonResult = JsonConvert.SerializeObject(result);
                 HttpResponseMessage response = this.Request.CreateResponse(HttpStatusCode.OK);
@@ -101,19 +99,19 @@ namespace ActionFramework.Agent.Api
 
             try
             {
-                IActionDataSource dataSource = Activator.GetActionDataSource();
-                IActionList actionList = new ActionList(dataSource);
-                dataSource.FillActions(actionList, Enum.ActionStatus.Enabled);
-                IAction action = actionList.Where(a => a.Type.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+                IAction action = Activator.FindAction(name);
 
                 if (action != null)
                     result = action.Execute(input);
                 else
-                    result = string.Format("Could not find action { }", name);
+                    result = string.Format("Could not find action {0}", name);
 
                 string jsonResult = JsonConvert.SerializeObject(result);
                 HttpResponseMessage response = this.Request.CreateResponse(HttpStatusCode.OK);
                 response.Content = new StringContent(jsonResult, Encoding.UTF8, "application/json");
+
+
+
                 return response;
 
                 //return new HttpResponseMessage(HttpStatusCode.OK)

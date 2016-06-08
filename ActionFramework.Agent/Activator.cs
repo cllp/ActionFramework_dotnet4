@@ -31,10 +31,8 @@ namespace ActionFramework.Agent
 
         public static string RunActions(ActionListParameters par)
         {
-            ActionFactory.InitializeLog();
-
-            systemlog = new LogElements(LogType.Agent.ToString());
-            systemlog.Add(new AssemblyLog(LogType.Assembly.ToString()));
+            //initialize the log
+            InitLog();
 
             try
             {
@@ -55,23 +53,20 @@ namespace ActionFramework.Agent
             return WriteLog();
         }
 
-        public static object RunAction(IAction action)
+        private static void InitLog()
         {
-            return action.Execute();
+            if (!LogContext.IsInitialized)
+            {
+                ActionFactory.InitializeLog();
+                systemlog = new LogElements(LogType.Agent.ToString());
+                systemlog.Add(new AssemblyLog(LogType.Assembly.ToString()));
+            }
         }
 
         private static string WriteLog()
         {
             systemlog.Add(actionResult);
             ActionFactory.CurrentLog().Add(systemlog);
-
-            //todo 
-            //here I can serialize the list of elements and send the data in the LogModel
-            //on the server side I can deserialize the list of elememts and insert the logs to the database
-            //var elements = ActionFactory.CurrentLog().ListOfElements;
-            //test
-            //var bytes = ObjectSerializer.ToBytes<List<LogElements>>(ActionFactory.CurrentLog().ListOfElements);
-            //test to do it with json instead
 
             var log = ActionFactory.CurrentLog().WriteXml;
 
@@ -89,14 +84,12 @@ namespace ActionFramework.Agent
             //log status of save to eventlogger
             ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "SaveLogStatus: " + saveLogStatus, Constants.EventLogId);
 
-            //Firebase
-            //string rootUri = "https://woxion01.firebaseio.com/";
-            //Firebase fb = new Firebase(rootUri);
-            //string path = "/logs";//"/path";
-            //string data = json;
-            //fb.Post(path, data);
-
             return log;
+        }
+
+        public static object RunAction(IAction action)
+        {
+            return action.Execute();
         }
 
         public static string GetNextRuntime()
@@ -157,6 +150,7 @@ namespace ActionFramework.Agent
         /// <returns></returns>
         public static IActionDataSource GetActionDataSource()
         {
+
             var actionFile = AgentConfigurationContext.Current.ActionFile;
             var agentId = AgentConfigurationContext.Current.AgentId;
             var xml = string.Empty;
@@ -169,12 +163,22 @@ namespace ActionFramework.Agent
 
                 var body = new object[2];
                 body[0] = agentId;
-                body[1] = actionFile; //TODO: check if .xml should be present "test.xml";
+                body[1] = actionFile; //with extension
 
                 postrequest.AddBody(body);
 
                 var postresponse = postclient.Execute(postrequest);
-                xml = ActionFactory.Compression.DecompressString(postresponse.Content);
+
+                //TODO parse JSON Result to string in order to decompress
+
+                var compressed_xml = JsonConvert.DeserializeObject<dynamic>(postresponse.Content);
+                
+                
+                //string fromjson = JsonConvert.DeserializeObject(compressed_xml);
+
+                //string compressed = JsonConvert.DeserializeObject(postresponse.Content).ToString();
+                
+                xml = ActionFactory.Compression.DecompressString(compressed_xml);
 
             }
             else
@@ -186,6 +190,23 @@ namespace ActionFramework.Agent
             }
 
             return new XmlDataSource(xml);
+        }
+
+        public static IAction FindAction(string name)
+        {
+            IActionDataSource dataSource = Activator.GetActionDataSource();
+            IActionList actionList = new ActionList(dataSource);
+            dataSource.FillActions(actionList, Enum.ActionStatus.Enabled);
+            IAction action = actionList.Where(a => a.Type.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+
+            if (action != null)
+            {
+                return action;
+            }
+            else
+            {
+                throw new Exception(string.Format("Could not find action {0}", name));
+            }
         }
 
         /// <summary>
@@ -207,7 +228,7 @@ namespace ActionFramework.Agent
                 var postrequest = new RestRequest("api/agent/runaction?name=writelog", Method.POST);
                 postrequest.RequestFormat = DataFormat.Json;
 
-                var body = new object[2];                
+                var body = new object[2];
                 body[0] = ActionFactory.Compression.CompressString(xml); //compressed xml
                 body[1] = AgentConfigurationContext.Current.AgentId; //agentId
 

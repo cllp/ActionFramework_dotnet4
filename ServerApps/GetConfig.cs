@@ -25,8 +25,6 @@ namespace ServerApps
             //object[] obj = (object[])input;
             JArray obj = (JArray)input;
 
-            
-
             var path = string.Format("{0}/{1}/{2}/{3}/{4}", AppDomain.CurrentDomain.BaseDirectory, "Agents", obj[0], "Configuration", obj[1]);
 
             var doc = XDocument.Load(path);

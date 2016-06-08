@@ -174,7 +174,7 @@ namespace ActionFramework.Classes
 
             ServerUrl = GetElementValue(settings, "ServerUrl");
             LocalUrl = GetElementValue(settings, "LocalUrl");
-            Mode = (RunMode)System.Enum.Parse(typeof(RunMode), GetElementValue(settings, "RunMode"));
+            Mode = (RunMode)System.Enum.Parse(typeof(RunMode), GetElementValue(settings, "RunMode"), true);
             Interval = Convert.ToInt32(GetElementValue(settings, "Interval"));
             //DataSourceLocation = (DataSourceLocation)System.Enum.Parse(typeof(DataSourceLocation), GetElementValue(settings, "DataSourceLocation"));
             //DataSourceFormat = (DataSourceFormat)System.Enum.Parse(typeof(DataSourceFormat), GetElementValue(settings, "DataSourceFormat"));

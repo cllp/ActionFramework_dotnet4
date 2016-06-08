@@ -10,11 +10,22 @@ namespace ServerApps
 {
     public class GetAgentUri : ActionBase
     {
-        public override object Execute(object agentId)
+        public string Uri { get; set; }
+
+        public override object Execute()
         {
-            var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Agents", agentId.ToString());
-            string uri = File.ReadAllText(Path.Combine(dir, "uri.txt"));
-            return uri;
+            try
+            {
+                if (string.IsNullOrEmpty(Uri))
+                    throw new Exception(string.Format("Property 'Uri' is not configured"));
+                else
+                    return Uri;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                return HandleException(ex);
+            }
         }
     }
 }

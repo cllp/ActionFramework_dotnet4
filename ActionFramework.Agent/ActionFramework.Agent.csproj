@@ -145,6 +145,24 @@
     <Content Include="AgentConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Agents\01\Configuration\host.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Agents\01\Configuration\test.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Agents\01\Logs\readme.txt" />
+    <Content Include="Agents\03\Configuration\host.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Agents\03\Configuration\test.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Agents\03\Logs\readme.txt" />
+    <Content Include="Agents\02\Configuration\test.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Agents\02\Logs\readme.txt" />
     <Content Include="Agents\12345\Configuration\test.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

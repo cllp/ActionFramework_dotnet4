@@ -61,7 +61,8 @@ namespace ActionFramework
 
         public static void InitializeLog()
         {
-            LogContext.Initialize(new Logger());
+            if(!LogContext.IsInitialized)
+                LogContext.Initialize(new Logger());
         }
 
         public static void InitializeAgentConfiguration(IAgentConfiguration config)
