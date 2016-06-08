@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ActionFramework.Entities;
 using ActionFramework.Interfaces;
 using System.Reflection;
 using ActionFramework.Classes;
@@ -11,7 +10,6 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using ActionFramework.Context;
 using ActionFramework.Enum;
-using ActionFramework.Domain.Model;
 using ActionFramework.Logging;
 using ActionFramework.Model;
 

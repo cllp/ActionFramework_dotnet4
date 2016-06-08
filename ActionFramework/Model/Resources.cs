@@ -1,13 +1,12 @@
-﻿using ActionFramework.Domain.Model;
+﻿using ActionFramework.Model;
 using ActionFramework.Logging;
-using ActionFramework.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ActionFramework.Entities
+namespace ActionFramework.Model
 {
     public class Resources : List<ResourceParameter>
     {

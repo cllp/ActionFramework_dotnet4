@@ -2,21 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ActionFramework.Domain.Model;
-using ActionFramework.Entities;
-using ActionFramework.Enum;
 using ActionFramework.Model;
+using ActionFramework.Enum;
 
 namespace ActionFramework.Interfaces
 {
     public interface IActionDataSource
     {
-        //IActionList ActionList
-        //{
-        //    get;
-        //    set;
-        //}
-
         List<App> Apps
         {
             get;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using ActionFramework.Classes;
 using ActionFramework.Context;
-using ActionFramework.Domain.Model;
+using ActionFramework.Model;
 using ActionFramework.Enum;
 using ActionFramework.Interfaces;
 
@@ -15,15 +15,15 @@ namespace ActionFramework.Agent.Extensions
 {
     public static class ActionExtension
     {
-        public static List<Domain.Model.Action> GetActionAndProperties(this Assembly ass)
+        public static List<Model.Action> GetActionAndProperties(this Assembly ass)
         {
             return GetActionAndProperties(ass, null);
         }
 
-        public static List<Domain.Model.Action> GetActionAndProperties(this Assembly ass, App app)
+        public static List<Model.Action> GetActionAndProperties(this Assembly ass, App app)
         {
             var actionTypes = ReflectionHelper.GetAssemblyActions(ass);
-            List<Domain.Model.Action> dbActions = new List<Domain.Model.Action>();
+            List<Model.Action> dbActions = new List<Model.Action>();
             foreach (var a in actionTypes)
             {
                 IAction instance = (IAction)System.Activator.CreateInstance(a);
@@ -31,7 +31,7 @@ namespace ActionFramework.Agent.Extensions
 
                 var instanceProperties = instance.GetInstanceProperties();
 
-                var dbAction = new Domain.Model.Action();
+                var dbAction = new Model.Action();
                 dbAction.App = app;
                 dbAction.BreakOnError = false;
                 dbAction.ClientExecute = true;

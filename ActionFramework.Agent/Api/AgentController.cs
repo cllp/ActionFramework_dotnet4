@@ -2,10 +2,9 @@
 using ActionFramework.Classes;
 using ActionFramework.Context;
 using ActionFramework.Agent.DataSource;
-using ActionFramework.Domain.Model;
-using ActionFramework.Domain.Model.EventLog;
-using ActionFramework.Interfaces;
 using ActionFramework.Model;
+using ActionFramework.Model.EventLog;
+using ActionFramework.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -224,9 +223,9 @@ namespace ActionFramework.Agent.Api
 
         [HttpGet]
         [Route("host/info")]
-        public SystemInformation GetSystemInformation()
+        public Model.SystemInformation GetSystemInformation()
         {
-            SystemInformation info = new SystemInformation();
+            Model.SystemInformation info = new Model.SystemInformation();
 
             SystemInformationHelper computerInfo = new SystemInformationHelper("win32_computersystem");
 
@@ -273,14 +272,14 @@ namespace ActionFramework.Agent.Api
 
         [HttpGet]
         [Route("host/eventlog")]
-        public EventList GetEventLogInfo(string logName, string level, string eventId, string timeSpanStart, string timeSpanEnd, int max)
+        public Model.EventLog.EventList GetEventLogInfo(string logName, string level, string eventId, string timeSpanStart, string timeSpanEnd, int max)
         {
             return ActionFactory.EventLogger().GetEventLogs(logName, level, eventId, timeSpanStart, timeSpanEnd, max);
         }
 
         [HttpGet]
         [Route("host/eventlog")]
-        public EventList GetEventLogInfo(object filter)
+        public Model.EventLog.EventList GetEventLogInfo(object filter)
         {
             throw new NotImplementedException();
             //return ActionFactory.EventLogger().GetEventLogs(logName, level, eventId, timeSpanStart, timeSpanEnd, max);

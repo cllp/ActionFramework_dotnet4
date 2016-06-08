@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ActionFramework.Entities;
 using System.Xml.Linq;
 using ActionFramework.Enum;
 using System.Reflection;
 using ActionFramework.Interfaces;
 using System.IO;
 using System.Text.RegularExpressions;
-using ActionFramework.Domain.Model;
+using ActionFramework.Model;
 using System.Configuration;
 using RestSharp;
 using ActionFramework.Context;
 using ActionFramework.Logging;
-using ActionFramework.Model;
 
 namespace ActionFramework.Classes
 {
@@ -31,10 +29,6 @@ namespace ActionFramework.Classes
 
             return str;
         }
-
-        
-
-       
 
         public static bool Match(string input, string pattern)
         {

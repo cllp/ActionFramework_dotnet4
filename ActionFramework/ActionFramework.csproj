@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ActionFramework</RootNamespace>
     <AssemblyName>ActionFramework</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SccProjectName>SAK</SccProjectName>
@@ -63,7 +63,9 @@
     <Compile Include="Base\ActionBase.cs" />
     <Compile Include="ActionFactory.cs" />
     <Compile Include="Classes\ActionList.cs" />
+    <Compile Include="Classes\EventLogger.cs" />
     <Compile Include="Classes\Status.cs" />
+    <Compile Include="Enum\PropertyType.cs" />
     <Compile Include="Enum\RunMode.cs" />
     <Compile Include="Helpers\ActionHelper.cs" />
     <Compile Include="Helpers\ObjectSerializer.cs" />
@@ -76,7 +78,24 @@
     <Compile Include="Extensions\ActionExtension.cs" />
     <Compile Include="Extensions\ModelExtensions.cs" />
     <Compile Include="Interfaces\IActionDataSource.cs" />
+    <Compile Include="Interfaces\IActionLog.cs" />
+    <Compile Include="Interfaces\IExceptionLog.cs" />
+    <Compile Include="Interfaces\ILogBase.cs" />
+    <Compile Include="Model\Action.cs" />
     <Compile Include="Model\ActionListParameters.cs" />
+    <Compile Include="Model\Agent.cs" />
+    <Compile Include="Model\App.cs" />
+    <Compile Include="Model\EventLog\Events.cs" />
+    <Compile Include="Model\Log.cs" />
+    <Compile Include="Model\LogModel\ActionLogBase.cs" />
+    <Compile Include="Model\LogModel\AgentLog.cs" />
+    <Compile Include="Model\LogModel\ErrorLog.cs" />
+    <Compile Include="Model\LogModel\InformationLog.cs" />
+    <Compile Include="Model\LogModel\WarningLog.cs" />
+    <Compile Include="Model\LogModel\XmlLog.cs" />
+    <Compile Include="Model\Organization.cs" />
+    <Compile Include="Model\Property.cs" />
+    <Compile Include="Model\Resource.cs" />
     <Compile Include="Model\ResourceParameter.cs" />
     <Compile Include="Classes\AgentConfiguration.cs" />
     <Compile Include="Classes\ApplicationInfo.cs" />
@@ -84,7 +103,6 @@
     <Compile Include="Classes\Compressor.cs" />
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\DateHelper.cs" />
-    <Compile Include="Classes\EventLogger.cs" />
     <Compile Include="Classes\GlobalActionFunctions.cs" />
     <Compile Include="Model\Resources.cs" />
     <Compile Include="Enum\ResourceFileType.cs" />
@@ -101,7 +119,6 @@
     <Compile Include="Classes\TimespanUtil.cs" />
     <Compile Include="Context\AgentConfigurationContext.cs" />
     <Compile Include="Logging\LogContext.cs" />
-    <Compile Include="Model\EventLogs.cs" />
     <Compile Include="Logging\LogElements.cs" />
     <Compile Include="Model\ActionProperty.cs" />
     <Compile Include="Logging\Logs\InformationLog.cs" />
@@ -120,13 +137,10 @@
     <Compile Include="Interfaces\IReplace.cs" />
     <Compile Include="Model\DataSourceParameter.cs" />
     <Compile Include="Interfaces\IParameter.cs" />
+    <Compile Include="Model\Schedule.cs" />
+    <Compile Include="Model\Setting.cs" />
+    <Compile Include="Model\SystemInformation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ActionFramework.Domain\ActionFramework.Domain.csproj">
-      <Project>{a7975db8-6cbc-4708-abd8-c5fc17400300}</Project>
-      <Name>ActionFramework.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />

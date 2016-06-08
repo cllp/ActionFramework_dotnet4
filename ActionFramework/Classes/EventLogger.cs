@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using ActionFramework.Domain.Model.EventLog;
+using ActionFramework.Model.EventLog;
 using ActionFramework.Interfaces;
 
 namespace ActionFramework.Classes
@@ -43,7 +43,7 @@ namespace ActionFramework.Classes
             // Disclaimer: Code NOT optimized, jsut want it to work...
             // TODO: Optimize code god damn it!!
 
-            Domain.Model.EventLog.EventList events = new Domain.Model.EventLog.EventList();
+            Model.EventLog.EventList events = new Model.EventLog.EventList();
 
             // Create the query string
             string queryString = CreateQueryString(logName, level, eventId, timeSpanStart, timeSpanEnd);
@@ -78,7 +78,7 @@ namespace ActionFramework.Classes
                 IList<object> logEventProps;
                 logEventProps = ((EventLogRecord)eventInstance).GetPropertyValues(logPropertyContext);
 
-                var log = new Domain.Model.EventLog.Event();
+                var log = new Model.EventLog.Event();
                 log.EventId = eventInstance.Id.ToString();
                 log.Level = eventInstance.LevelDisplayName;
                 log.Task = eventInstance.TaskDisplayName;

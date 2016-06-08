@@ -28,8 +28,8 @@ namespace ActionFramework.Domain.Model
             set { actions = value; }
         }
 
-        [DapperIgnore]
-        public AgentApp AgentApp { get; set; }
+        //[DapperIgnore]
+        //public AgentApp AgentApp { get; set; }
 
         //public DateTime? InstallDate { get; set; }
     }

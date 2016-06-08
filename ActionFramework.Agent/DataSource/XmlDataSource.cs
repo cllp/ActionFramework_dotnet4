@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ActionFramework.Interfaces;
-using ActionFramework.Entities;
 using System.Xml.Linq;
 using ActionFramework.Enum;
 using ActionFramework.Classes;
 using ActionFramework.Context;
-using ActionFramework.Domain.Model;
+using ActionFramework.Model;
 using ActionFramework.Extensions;
 using ActionFramework.Model;
 
@@ -18,9 +17,9 @@ namespace ActionFramework.Agent.DataSource
     {
         private string xml;
 
-        private List<App> apps = new List<App>();
+        private List<Model.App> apps = new List<Model.App>();
 
-        public List<App> Apps
+        public List<Model.App> Apps
         {
             get { return apps; }
             set { apps = value; }

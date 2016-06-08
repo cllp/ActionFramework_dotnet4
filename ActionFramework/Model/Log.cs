@@ -1,35 +1,36 @@
-﻿using System;
+﻿using ActionFramework.Interfaces;
+using ActionFramework.Model.LogModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using ActionFramework.Domain.Interface;
-using ActionFramework.Domain.Model.LogModel;
-using ActionFramework.Model.Attributes;
-using System.Runtime.Serialization;
 
 namespace ActionFramework.Model
 {
     public partial class Log
     {
-        [DataMember]
-        public int Id { get; set; }
-        [DataMember]
-        public int AgentId { get; set; }
-        [DataMember]
-        public System.DateTime Date { get; set; }
-        [DataMember]
-        public string Type { get; set; }
-        [DataMember]
-        public string Description { get; set; }
-        [DataMember]
-        public string Message { get; set; }
-
         private IList<ErrorLog> errorLogs = new List<ErrorLog>();
         //private IList<FatalLog> fatalLogs = new List<FatalLog>();
 
-        [DapperIgnore]
+        private string message;
+
+        public string Message
+        {
+            get { return message; }
+            set { message = value; }
+        }
+
+        private string type;
+
+        public string Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
+
+
         public XDocument XmlMessage
         {
             get
@@ -76,7 +77,7 @@ namespace ActionFramework.Model
             set { warningLogs = value; }
         }
 
-        public Model.Agent Agent { get; set; }
+        public Agent Agent { get; set; }
 
         public AgentLog AgentLog { get; set; }
 
@@ -173,11 +174,5 @@ namespace ActionFramework.Model
 
             return obj;
         }
-
-        //public IEnumerable<ErrorLog> ErrorLogs { get; set; }
-
-        //public IEnumerable<InformationLog> InformationLogs { get; set; }
-
-        //public IEnumerable<WarningLog> WarningLogs { get; set; }
     }
 }

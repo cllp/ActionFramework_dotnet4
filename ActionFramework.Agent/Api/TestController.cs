@@ -1,5 +1,5 @@
 ﻿using ActionFramework.Agent.Context;
-using ActionFramework.Domain.Model;
+using ActionFramework.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +20,9 @@ namespace ActionFramework.Agent.Api
         }
 
         [Route("systeminfo")]
-        public SystemInformation GetSystemInformation()
+        public Model.SystemInformation GetSystemInformation()
         {
-            SystemInformation info = new SystemInformation();
+            Model.SystemInformation info = new Model.SystemInformation();
 
             SystemInformationHelper computerInfo = new SystemInformationHelper("win32_computersystem");
 

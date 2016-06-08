@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ActionFramework.Agent</RootNamespace>
     <AssemblyName>ActionFramework.Agent</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -30,6 +30,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -199,10 +200,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ActionFramework.Domain\ActionFramework.Domain.csproj">
-      <Project>{a7975db8-6cbc-4708-abd8-c5fc17400300}</Project>
-      <Name>ActionFramework.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ActionFramework\ActionFramework.csproj">
       <Project>{f4ea4b53-cdb0-4677-9934-a11bb4bfd171}</Project>
       <Name>ActionFramework</Name>
