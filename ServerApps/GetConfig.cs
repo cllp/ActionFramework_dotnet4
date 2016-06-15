@@ -30,6 +30,9 @@ namespace ServerApps
             var doc = XDocument.Load(path);
             string compact = ActionFactory.Compression.CompressString(doc.Root.ToString());
 
+            Log.Info(string.Format("Reading config for agent '{0}'. Configuration '{1}' Path '{2}'", obj[0], obj[1], path));
+
+
             return compact;
         }
     }

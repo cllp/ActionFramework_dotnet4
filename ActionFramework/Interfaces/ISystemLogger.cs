@@ -10,7 +10,7 @@ using ActionFramework.Model.EventLog;
 
 namespace ActionFramework.Interfaces
 {
-    public interface IEventLogger
+    public interface ISystemLogger
     {
         void Write(EventLogEntryType logtype, string message, int eventId);
 

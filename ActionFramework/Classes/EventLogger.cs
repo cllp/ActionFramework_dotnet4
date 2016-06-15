@@ -11,7 +11,7 @@ using ActionFramework.Interfaces;
 
 namespace ActionFramework.Classes
 {
-    internal class EventLogger : IEventLogger
+    internal class EventLogger : ISystemLogger
     {
         private string source = "ActionFramework";
         private string caller = "";

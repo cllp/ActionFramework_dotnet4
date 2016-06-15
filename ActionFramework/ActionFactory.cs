@@ -48,12 +48,12 @@ namespace ActionFramework
         //    return new ActionList(new XmlDataSource(xmlPath));
         //}
 
-        public static IEventLogger EventLogger()
+        public static ISystemLogger EventLogger()
         {
             return new EventLogger();
         }
 
-        public static IEventLogger EventLogger(string caller)
+        public static ISystemLogger EventLogger(string caller)
         {
             return new EventLogger(caller);
         }

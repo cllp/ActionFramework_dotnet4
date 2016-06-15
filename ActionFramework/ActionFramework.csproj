@@ -130,7 +130,7 @@
     <Compile Include="Interfaces\IActionList.cs" />
     <Compile Include="Interfaces\ICommon.cs" />
     <Compile Include="Interfaces\ICompressor.cs" />
-    <Compile Include="Interfaces\IEventLogger.cs" />
+    <Compile Include="Interfaces\ISystemLogger.cs" />
     <Compile Include="Interfaces\IAgentConfiguration.cs" />
     <Compile Include="Logging\Interfaces\ILogElement.cs" />
     <Compile Include="Logging\Interfaces\ILogger.cs" />

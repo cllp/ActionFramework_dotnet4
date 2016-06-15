@@ -120,7 +120,7 @@ namespace ActionFramework.Base
             }
         }
 
-        public IEventLogger EventLogger
+        public ISystemLogger EventLogger
         {
             get
             {
