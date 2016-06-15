@@ -1,4 +1,20 @@
-﻿--- Agent
+﻿Agent
+GET http://{host}/api/agent/timer/info
+GET http://{host}/api/agent/timer/stop
+GET http://{host}/api/agent/timer/initialized
+GET http://{host}/api/agent/timer/start/{interval}
+GET http://{host}/api/agent/run
+GET http://{host}/api/agent/run/{name}
+POST http://{host}/api/agent/runaction?name={action}
+GET http://{host}/api/agent/runaction/{action}
+Server
+--- Action
+GET http://{host}/api/action/write/{text}
+GET http://{host}/api/action/get/{id}
+GET http://{host}/api/action/getbyagentid/{agentid}
+GET http://{host}/api/action/available/{agentid}
+GET http://{host}/api/action/create/{actionmodel}
+--- Agent
 GET http://{host}/api/agent/list
 GET http://{host}/api/agent/uri/{agentid}
 GET http://{host}/api/agent/{agent}/{file}
@@ -8,3 +24,11 @@ GET http://{host}/api/getagent/{id}
 GET http://{host}/api/getagents
 GET http://{host}/api/getapps/{agentid}
 GET http://{host}/api/getagentschedule/{uri}
+--- App
+GET http://{host}/api/app/getapps/{agentid}
+GET http://{host}/api/app/install/{agentid}/{appid}/{uri}
+--- Log
+GET http://{host}/api/log/detail/{id}
+GET http://{host}/api/log/getlogswithpaging/{page}/{pagesize}
+POST http://{host}/api/log/write
+GET http://{host}/api/log/getlogcount

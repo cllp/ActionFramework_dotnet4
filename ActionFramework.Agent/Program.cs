@@ -79,6 +79,9 @@ namespace ActionFramework.Agent
         {
             ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Initialize Watcher on path: " + path, Constants.EventLogId);
 
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
             watcher = new FileSystemWatcher();
             watcher.Path = path;
             watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite

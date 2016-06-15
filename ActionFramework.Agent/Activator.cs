@@ -41,7 +41,11 @@ namespace ActionFramework.Agent
                 else
                     systemlog.Add(new InformationLog(string.Format("ActionList Initiated. Using {0} local url.", AgentConfigurationContext.Current.LocalUrl)));
 
+                //run all actions in the list
                 actionResult = actionList.Run(out runtime);
+
+                //add action result log to system log
+                systemlog.Add(actionResult);
             }
             catch (Exception ex)
             {
@@ -56,20 +60,24 @@ namespace ActionFramework.Agent
         {
             if (!LogContext.IsInitialized)
             {
+                //initiate the log
                 ActionFactory.InitializeLog();
-                systemlog = new LogElements(LogType.Agent.ToString());
-                systemlog.Add(new AssemblyLog(LogType.Assembly.ToString()));
             }
+
+            //create a new system log
+            systemlog = new LogElements(LogType.Agent.ToString());
+
+            // add assembly log to system log
+            systemlog.Add(new AssemblyLog(LogType.Assembly.ToString()));
         }
 
         private static string WriteLog()
         {
-            systemlog.Add(actionResult);
+            //add the system log to the current log
             ActionFactory.CurrentLog().Add(systemlog);
 
             var log = ActionFactory.CurrentLog().WriteXml;
 
-            //clear the current log
             ActionFactory.CurrentLog().ClearElements();
 
             //string json = JsonConvert.SerializeXNode(xmllog.Root);
@@ -245,6 +253,9 @@ namespace ActionFramework.Agent
 
                 string file = new GlobalActionFunctions().GetCurrentFormatDateTimeString() + ".xml";
                 var path = Path.Combine(AgentConfigurationContext.Current.DirectoryPath) + @"\Agents\" + AgentConfigurationContext.Current.AgentId + @"\Logs\";
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+
                 File.WriteAllText(path + file, xml, Encoding.UTF8);
                 return "OK";
             }
