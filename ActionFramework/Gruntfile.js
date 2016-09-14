@@ -24,8 +24,8 @@ module.exports = function(grunt) {
 	   var assets = {};
 
 	   grunt.file.recurse("Documentation/assets", function (path, root, sub, filename) {
-
-		assets[path] = new Buffer(grunt.file.read(path, {encoding: null})).toString("base64");
+	       var key = sub ? sub + "/" + filename : filename;
+		assets[key] = new Buffer(grunt.file.read(path, {encoding: null})).toString("base64");
 
 	});
 

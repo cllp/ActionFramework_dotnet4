@@ -150,7 +150,9 @@
     <None Include="Documentation\docs\2. Actions\Create an Action.md" />
     <None Include="Documentation\docs\2. Actions\On Demand %28REST%29 Actions.md" />
     <None Include="Documentation\docs\3. Logging\Create custom log class.md" />
+    <None Include="Documentation\docs\How to use the documentation tool\How to edit documentation.md" />
     <None Include="Documentation\index.handlebars" />
+    <None Include="package.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +166,7 @@
     <Content Include="Documentation\scripts\prism.js" />
     <Content Include="Documentation\styles\prism.css" />
     <Content Include="Documentation\styles\styles.css" />
+    <Content Include="Gruntfile.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
