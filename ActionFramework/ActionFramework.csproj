@@ -144,11 +144,26 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
+    <None Include="Documentation\docs\1. Configuration\Configuration Guide.md" />
+    <None Include="Documentation\docs\1. Configuration\Service Installation.md" />
+    <None Include="Documentation\docs\2. Actions\API Endpoints.md" />
+    <None Include="Documentation\docs\2. Actions\Create an Action.md" />
+    <None Include="Documentation\docs\2. Actions\On Demand %28REST%29 Actions.md" />
+    <None Include="Documentation\docs\3. Logging\Create custom log class.md" />
+    <None Include="Documentation\index.handlebars" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Parameters\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Documentation\assets\service-installation-1.png" />
+    <Content Include="Documentation\assets\service-installation-2.png" />
+    <Content Include="Documentation\dist\index.html" />
+    <Content Include="Documentation\scripts\prism.js" />
+    <Content Include="Documentation\styles\prism.css" />
+    <Content Include="Documentation\styles\styles.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
