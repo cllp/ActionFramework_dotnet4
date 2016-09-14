@@ -187,3 +187,7 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+# Documentation tempfiles
+ActionFramework/Documentation/tmp/*.*
+/ActionFramework/Documentation/tmp

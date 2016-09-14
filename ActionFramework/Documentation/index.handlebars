@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Actionframework Documentation
+    </title>
+    <style>
+        {{{styles}}}
+    </style>
+</head>
+<body>
+    <h1>Action Framework Documentation</h1>
+    <ul>
+        {{#each sections}}
+
+        <li>
+            {{@key}}
+            <ul>
+                {{#each .}}
+                <li>
+                    <a href="#{{name}}">{{title}}</a>
+                </li>
+                {{/each}}
+            </ul>
+        </li>
+        {{/each}}
+    </ul>
+    {{#each sections}}
+    <article>
+        <h2>{{@key}}</h2>
+        {{#each .}}
+        <section id="{{name}}">
+            <h2>{{title}}</h2>
+            {{{content}}}
+        </section>
+        {{/each}}
+    </article>
+    {{/each}}
+    <script>
+        {{{scripts}}}
+    </script>
+</body>
+</html>

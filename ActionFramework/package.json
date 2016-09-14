@@ -1,0 +1,22 @@
+{
+  "name": "document-builder",
+  "version": "1.0.0",
+  "description": "Compile a bunch of files into a single static one",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "rymdpeter",
+  "license": "ISC",
+  "devDependencies": {
+    "cheerio": "^0.20.0",
+    "grunt": "^1.0.1",
+    "grunt-compile-handlebars": "^2.0.2",
+    "grunt-contrib-handlebars": "^1.0.0",
+    "marked": "^0.3.5"
+  },
+  "dependencies": {}
+}
