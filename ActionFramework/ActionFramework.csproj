@@ -150,6 +150,7 @@
     <None Include="Documentation\docs\2. Actions\Create an Action.md" />
     <None Include="Documentation\docs\2. Actions\On Demand %28REST%29 Actions.md" />
     <None Include="Documentation\docs\3. Logging\Create custom log class.md" />
+    <None Include="Documentation\docs\How to use the documentation tool\Getting started.md" />
     <None Include="Documentation\docs\How to use the documentation tool\How to edit documentation.md" />
     <None Include="Documentation\index.handlebars" />
     <None Include="package.json" />
