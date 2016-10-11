@@ -11,6 +11,7 @@
     <add key="Interval" value="3600000" />
     <add key="Debug" value="false" />
     <add key="RunMode" value="Local" /> <!--Local / Remote -->
+    <add key="Sync" value="true" />
 
   </Configuration>
 

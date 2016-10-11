@@ -38,5 +38,7 @@ namespace ActionFramework.Interfaces
         bool UpdateSetting(string key, object value);
 
         string DirectoryPath { get; }
+
+        bool Sync { get; }
     }
 }

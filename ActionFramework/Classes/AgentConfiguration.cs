@@ -22,6 +22,7 @@ namespace ActionFramework.Classes
         //private DataSourceLocation dataSourceLocation = DataSourceLocation.Local;
         //private DataSourceFormat dataSourceFormat = DataSourceFormat.Simple;
         private bool debug = false;
+        private bool sync = false;
         private RunMode mode = RunMode.Local;
 
         public string ConfigurationFile
@@ -107,6 +108,12 @@ namespace ActionFramework.Classes
             set { debug = value; }
         }
 
+        public bool Sync
+        {
+            get { return sync; }
+            set { sync = value; }
+        }
+
         public RunMode Mode
         {
             get { return mode; }
@@ -179,6 +186,7 @@ namespace ActionFramework.Classes
             //DataSourceLocation = (DataSourceLocation)System.Enum.Parse(typeof(DataSourceLocation), GetElementValue(settings, "DataSourceLocation"));
             //DataSourceFormat = (DataSourceFormat)System.Enum.Parse(typeof(DataSourceFormat), GetElementValue(settings, "DataSourceFormat"));
             Debug = Convert.ToBoolean(GetElementValue(settings, "Debug"));
+            Sync = Convert.ToBoolean(GetElementValue(settings, "Sync"));
 
             ActionFactory.EventLogger(ServiceName).Write(EventLogEntryType.Information, "Loaded agent configuration: " + path, Constants.EventLogId);
         }
