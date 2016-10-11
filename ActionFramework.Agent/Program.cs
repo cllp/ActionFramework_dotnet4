@@ -20,7 +20,6 @@ using ActionFramework.Model;
 using System.Diagnostics.Eventing.Reader;
 using System.Xml.Linq;
 using System.IO;
-using ActionFramework.Model;
 using ActionFramework.Agent.DataSource;
 using ActionFramework.Logging;
 using Microsoft.Owin.Hosting;

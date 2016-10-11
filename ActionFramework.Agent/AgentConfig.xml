@@ -3,8 +3,8 @@
 
   <Configuration>
 
-    <add key="AgentId" value="03"/>
-    <add key="ServerUrl" value="http://localhost:12" />
+    <add key="AgentId" value="3"/>
+    <add key="ServerUrl" value="http://localhost:1" />
     <add key="LocalUrl" value="http://localhost:13" />
     <add key="ActionFile" value="test.xml"/>
     <add key="DropFolder" value="C:\temp\drop\"/>
