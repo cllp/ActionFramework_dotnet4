@@ -158,6 +158,7 @@ namespace ActionFramework.Classes
             if (string.IsNullOrEmpty(value))
                 throw new Exception("Error in function 'ReplaceVariableWithPropertyValue'. The value is null.");
 
+            //TODO: enable invoke from any assembly
             if (value.StartsWith("Invoke"))
             {
                 try

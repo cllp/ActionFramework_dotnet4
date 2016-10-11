@@ -204,6 +204,10 @@
       <Project>{f4ea4b53-cdb0-4677-9934-a11bb4bfd171}</Project>
       <Name>ActionFramework</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DemoApp\DemoApp.csproj">
+      <Project>{2aafb1ea-9f21-48bb-8aaf-73809750d6a8}</Project>
+      <Name>DemoApp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ServerApps\ServerApps.csproj">
       <Project>{4d24a02e-658c-4b4b-b4d9-e3e0b34300e5}</Project>
       <Name>ServerApps</Name>

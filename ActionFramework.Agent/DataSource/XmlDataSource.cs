@@ -105,9 +105,11 @@ namespace ActionFramework.Agent.DataSource
 
             foreach (XElement e in actionElements)
             {
+                Type actionType = ReflectionHelper.GetActionType(actionTypes, ActionHelper.GetActionProperty(e, "Type").Value);
+
                 try
                 {
-                    Type actionType = ReflectionHelper.GetActionType(actionTypes, ActionHelper.GetActionProperty(e, "Type").Value);
+                    
                     IAction action = (IAction)System.Activator.CreateInstance(actionType);
                     action.Id = e.Attribute("Id").Value;
                     action.Type = actionType;
@@ -127,7 +129,9 @@ namespace ActionFramework.Agent.DataSource
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    //todo throw a more detailed log.
+                    var message = string.Format("Failed to create an instance of the IAction Type: '{0}'", actionType.FullName);
+                    throw new Exception(message + ". " + ex.Message, ex.InnerException);
                 }
             }
 
