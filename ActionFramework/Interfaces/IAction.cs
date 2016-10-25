@@ -88,11 +88,6 @@ namespace ActionFramework.Interfaces
             get;
         }
 
-        ICommon Common
-        {
-          get;
-        }
-
         void AddDynamicProperties(List<ActionProperty> properties);
 
         void AddResources(List<ResourceParameter> resources);

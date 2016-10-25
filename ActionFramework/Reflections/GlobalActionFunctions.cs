@@ -8,13 +8,6 @@ namespace ActionFramework.Classes
 {
     public class GlobalActionFunctions
     {
-        ICommon common = new Common();
-
-        public string ReadRegistry(string path, string key, string registryHive)
-        {
-            return common.ReadRegistry(path, key, registryHive).ToString();
-        }
-
         public string GetExecutionRoot(string keyfolder)
         {
             string[] executionPath = System.Reflection.Assembly.GetExecutingAssembly().Location.Split('\\');

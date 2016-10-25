@@ -37,8 +37,8 @@ namespace ActionFramework.Agent.Api
             {
                 
                 var msg = "RunActions() caused an exception" + " " + ex.Message;
-                var log = ActionFactory.CurrentLog().WriteXml;
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+                //var log = ActionFactory.CurrentLog().WriteXml;
+                ActionFactory.SysLog().Write("Error", msg);
 
                 result = msg;
             }
@@ -81,7 +81,7 @@ namespace ActionFramework.Agent.Api
             {
                 var log = ActionFactory.CurrentLog().WriteXml;
                 var msg = string.Format("RunAction() method with parameter '{0}' caused an exception. Message: '{1}'", name, ex.Message);
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+                ActionFactory.SysLog().Write("Error", msg);
 
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -120,11 +120,11 @@ namespace ActionFramework.Agent.Api
             }
             catch (Exception ex)
             {
-                var log = ActionFactory.CurrentLog().WriteXml;
+                //var log = ActionFactory.CurrentLog().WriteXml;
                 var msg = string.Format("RunAction() method with parameter '{0}' caused an exception. Message: '{1}'", name, ex.Message);
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+                ActionFactory.SysLog().Write("Error", msg);
 
-                return new HttpResponseMessage(HttpStatusCode.OK)
+                return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
                     Content = new StringContent(msg, Encoding.UTF8, "text/html")
                 };
@@ -150,7 +150,7 @@ namespace ActionFramework.Agent.Api
             catch (Exception ex)
             {
                 var msg = "RunActions(configurationFile) caused an exception" + " " + ex.Message;
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+                ActionFactory.SysLog().Write("Error", msg);
                 return msg;
             }
         }
@@ -171,7 +171,7 @@ namespace ActionFramework.Agent.Api
             catch (Exception ex)
             {
                 var msg = "StopTimer caused an exception" + " " + ex.Message;
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+                ActionFactory.SysLog().Write("Error", msg);
 
                 return new HttpResponseMessage(HttpStatusCode.InternalServerError)
                 {
@@ -193,7 +193,7 @@ namespace ActionFramework.Agent.Api
             catch (Exception ex)
             {
                 var msg = "StartTimer caused an exception" + " " + ex.Message;
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, msg, Constants.EventLogId);
+                ActionFactory.SysLog().Write("Error", msg);
                 return msg;
             }
         }
@@ -271,10 +271,10 @@ namespace ActionFramework.Agent.Api
         }
 
         [HttpGet]
-        [Route("host/eventlog")]
-        public Model.EventLog.EventList GetEventLogInfo(string logName, string level, string eventId, string timeSpanStart, string timeSpanEnd, int max)
+        [Route("host/syslog")]
+        public string GetEventLogInfo()
         {
-            return ActionFactory.EventLogger().GetEventLogs(logName, level, eventId, timeSpanStart, timeSpanEnd, max);
+            return ActionFactory.SysLog().GetLog();
         }
 
         [HttpGet]

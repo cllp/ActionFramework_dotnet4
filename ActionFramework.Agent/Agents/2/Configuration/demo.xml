@@ -16,11 +16,19 @@
   <Actions>
 
     <Action Id="1" Type="Status" Enabled="true" ClientExecute="true" Description="Check AF Status" BreakOnError="true" />
-
     <Action Id="2" Type="GetConfig" Enabled="true" ClientExecute="false" Description="" BreakOnError="true" />
     <Action Id="3" Type="ListAgents" Enabled="true" ClientExecute="false" Description="" BreakOnError="true" />
     <Action Id="4" Type="WriteLog" Enabled="true" ClientExecute="false" Description="" BreakOnError="true" />
+    <Action Id="5" Type="DemoActionReturnValue" Enabled="true" ClientExecute="false" Description="" BreakOnError="true" />
+    <Action Id="6" Type="DemoAction" Enabled="true" ClientExecute="true" Description="" BreakOnError="true">
+      <Property Name="DemoProperty" Value="Runtimevalue: {LogFile}" />
+      <Property Name="AnotherProperty" Value="Exec|5" /> <!-- execute another action and output the value -->
+    </Action>
     <Action Id="7" Type="GetCustomers" Enabled="true" ClientExecute="false" Description="" BreakOnError="true" />
+    <Action Id="8" Type="OnDemandAction" Enabled="true" ClientExecute="false" Description="" BreakOnError="true" />
+    <Action Id="9" Type="FileListener" Enabled="true" ClientExecute="true" Description="" BreakOnError="true" />
+
+
   </Actions>
 
 </ActionFramework>

@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 using ActionFramework;
 using ActionFramework.Interfaces;
 using ActionFramework.Enum;
-using System.Reflection;
+//using System.Reflection;
 using System.Text.RegularExpressions;
 using ActionFramework.Context;
 using ActionFramework.Logging;
@@ -21,7 +21,6 @@ namespace ActionFramework.Classes
     {
         private List<ActionProperty> globalSettings = new List<ActionProperty>();
         private Resources resources = new Resources();
-        private ICommon common = new ActionFramework.Classes.Common();
         private IActionDataSource dataSource;
         private int agentExecute = 0;
         private int internalActionExecute = 0;
@@ -126,7 +125,8 @@ namespace ActionFramework.Classes
                     else
                         status = a.Status;
 
-                    ActionFactory.EventLogger().Write(System.Diagnostics.EventLogEntryType.Error, "Error while executing action id '" + a.Id + "'" + ". Exception: " + ex.Message, Constants.EventLogId);
+                    //ActionFactory.EventLogger().Write(System.Diagnostics.EventLogEntryType.Error, "Error while executing action id '" + a.Id + "'" + ". Exception: " + ex.Message);
+                    ActionFactory.SysLog().Write("Error", "Error while executing action id '" + a.Id + "'" + ". Exception: " + ex.Message);
                     a.Log.Error("Error while executing action id '" + a.Id + "'");
                     a.Log.Error(ex);
                     if (a.BreakOnError)
@@ -173,11 +173,11 @@ namespace ActionFramework.Classes
                         object[] par = ReplaceVariableWithPropertyValue(invokes[2]).Split(',');
                         string invFunction = ReplaceVariableWithPropertyValue(invokes[1]);
 
-                        return common.InvokeMethod(gaf, invokes[1], par).ToString();
+                        return ReflectionHelper.InvokeMethod(gaf, invokes[1], par).ToString();
                     }
                     else
                     {
-                        return common.InvokeMethod(gaf, invokes[1]).ToString();
+                        return ReflectionHelper.InvokeMethod(gaf, invokes[1]).ToString();
                     }
                 }
                 catch (Exception ex)
@@ -191,7 +191,7 @@ namespace ActionFramework.Classes
             {
                 try
                 {
-                    List<string> variables = common.GetVariables(value);
+                    List<string> variables = ActionHelper.GetVariables(value);
                     if (variables.Count > 0)
                     {
                         string newValue = value;

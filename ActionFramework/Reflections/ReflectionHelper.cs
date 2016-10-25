@@ -32,9 +32,7 @@ namespace ActionFramework.Classes
 
         public static Assembly[] GetDomainAssemblies()
         {
-
             return AppDomain.CurrentDomain.GetAssemblies();
-
         }
 
         public static Assembly[] GetCustomAssemblies(string customAssemblyPath)
@@ -305,6 +303,36 @@ namespace ActionFramework.Classes
             }
 
             return assemblies;
+        }
+
+        public static string GetAssemblyLocation()
+        {
+            return Assembly.GetExecutingAssembly().Location;
+        }
+
+        public static object InvokeMethod(object instance, string methodName, object[] parameters)
+        {
+            //Getting the method information using the method info class
+            MethodInfo mi = instance.GetType().GetMethod(methodName);
+
+            //invoing the method
+            //null- no parameter for the function [or] we can pass the array of parameters
+            return mi.Invoke(instance, parameters);
+        }
+
+        public static object InvokeMethod(object instance, string methodName)
+        {
+            //Getting the method information using the method info class
+            MethodInfo mi = instance.GetType().GetMethod(methodName);
+
+            //invoing the method
+            //null- no parameter for the function [or] we can pass the array of parameters
+            return mi.Invoke(instance, null);
+        }
+
+        public static MethodInfo[] InvokeMethod(Type type)
+        {
+            return type.GetMethods(BindingFlags.Public | BindingFlags.Static);
         }
     }
 }

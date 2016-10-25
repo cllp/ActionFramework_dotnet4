@@ -41,7 +41,7 @@ namespace ActionFramework.Context
             {
                 
                 config = new AgentConfiguration();
-                ActionFactory.EventLogger(config.ServiceName).Write(System.Diagnostics.EventLogEntryType.Information, "Initialize AgentConfigurationContext", Constants.EventLogId);
+                ActionFactory.SysLog().Write("Info", "Initialize AgentConfigurationContext");
             }
         }
 

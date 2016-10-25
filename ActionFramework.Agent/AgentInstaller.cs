@@ -23,7 +23,7 @@ namespace ActionFramework.Agent
         {
             //if (!AgentConfigurationContext.IsInitialized)
             //{
-            //    ActionFactory.EventLogger().Write(System.Diagnostics.EventLogEntryType.Information, "Initialize AgentConfigurationContext from AgentInstaller", Constants.EventLogId);
+            //    ActionFactory.EventLogger().Write(System.Diagnostics.EventLogEntryType.Information, "Initialize AgentConfigurationContext from AgentInstaller");
             //    AgentConfigurationContext.Initialize(new AgentConfiguration());
             //}
 

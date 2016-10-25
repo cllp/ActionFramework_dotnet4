@@ -5,13 +5,13 @@ using System.Text;
 using ActionFramework.Interfaces;
 using System.Reflection;
 using ActionFramework.Classes;
-using ActionFramework.Events;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 using ActionFramework.Context;
 using ActionFramework.Enum;
 using ActionFramework.Logging;
 using ActionFramework.Model;
+using ActionFramework.SystemLogger;
 
 namespace ActionFramework.Base
 {
@@ -30,9 +30,9 @@ namespace ActionFramework.Base
         private bool breakOnError = false;
         private List<ActionProperty> dynamicProperties;
         private List<ResourceParameter> resources = new List<ResourceParameter>();
-        public delegate void InitEventHandler(object sender, InitEventArgs e);
-        public event InitEventHandler Initialize;
-        private ICommon common;
+        //public delegate void InitEventHandler(object sender, InitEventArgs e);
+        //public event InitEventHandler Initialize;
+        //
         //public delegate void StartEventHandler(object sender, StartEventArgs e);
         //public event StartEventHandler BeforeStart;
 
@@ -120,31 +120,17 @@ namespace ActionFramework.Base
             }
         }
 
-        public ISystemLogger EventLogger
+        public ISystemLogger SysLog
         {
             get
             {
-                return ActionFactory.EventLogger();
+                return ActionFactory.SysLog();
             }
-        }
-
-        public ICommon Common
-        {
-            get { return common; }
         }
 
         public ActionBase()
         {
             dynamicProperties = new List<ActionProperty>();
-            common = new Common();
-            //event
-            OnInitialize(new InitEventArgs(this));
-            //BeforeStart(this, new StartEventArgs());
-        }
-
-        void OnInitialize(InitEventArgs e)
-        {
-            if (Initialize != null) Initialize(this, e);
         }
 
         public void AddDynamicProperty(ActionProperty property)
@@ -290,7 +276,7 @@ namespace ActionFramework.Base
         {
             try
             {
-                return this.common.InvokeMethod(instance, method, parameters);
+                return ReflectionHelper.InvokeMethod(instance, method, parameters);
             }
             catch
             {
@@ -303,7 +289,7 @@ namespace ActionFramework.Base
         {
             try
             {
-                return this.common.InvokeMethod(instance, method);
+                return ReflectionHelper.InvokeMethod(instance, method);
             }
             catch
             {
@@ -389,11 +375,11 @@ namespace ActionFramework.Base
                                 object[] par = ReplaceVariableWithPropertyValue(invokes[2]).Split(',');
                                 string invFunction = ReplaceVariableWithPropertyValue(invokes[1]);
 
-                                return common.InvokeMethod(gaf, invokes[1], par).ToString();
+                                return ReflectionHelper.InvokeMethod(gaf, invokes[1], par).ToString();
                             }
                             else
                             {
-                                return common.InvokeMethod(gaf, invokes[1]).ToString();
+                                return ReflectionHelper.InvokeMethod(gaf, invokes[1]).ToString();
                             }
                         }
                         catch (Exception ex)
@@ -414,7 +400,7 @@ namespace ActionFramework.Base
                     {
                         try
                         {
-                            List<string> variables = common.GetVariables(value);
+                            List<string> variables = ActionHelper.GetVariables(value);
                             if (variables.Count > 0)
                             {
                                 string newValue = value;

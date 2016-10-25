@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ActionFramework.Interfaces;
+using ActionFramework.Logging;
 
 namespace ActionFramework.Model.LogModel
 {
     public class ActionLogBase : IActionLog, ILogBase
     {
         private string message = String.Empty;
-        private DateTime created;// = String.Empty;
+        private DateTime created;
         private string actionId = String.Empty;
         private string actionType = String.Empty;
 
@@ -25,7 +26,6 @@ namespace ActionFramework.Model.LogModel
             get { return created; }
             set { created = value; }
         }
-
         public string ActionId
         {
             get { return actionId; }
@@ -45,10 +45,5 @@ namespace ActionFramework.Model.LogModel
             get { return assembly; }
             set { assembly = value; }
         }
-        
-
-        
-        
-        
     }
 }

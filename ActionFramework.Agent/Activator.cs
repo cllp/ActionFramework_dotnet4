@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+//using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -50,7 +50,7 @@ namespace ActionFramework.Agent
             catch (Exception ex)
             {
                 systemlog.Add(new ExceptionLog(ex));
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, "An error occured when runnign the actionlist. " + ex.Message + ". " + ex.StackTrace, Constants.EventLogId);
+                ActionFactory.SysLog().Write("Error", "An error occured when runnign the actionlist. " + ex.Message + ". " + ex.StackTrace);
             }
 
             return WriteLog();
@@ -86,16 +86,20 @@ namespace ActionFramework.Agent
             var saveLogStatus = SaveActionLog(log);
 
             //log to eventlogger
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, log, Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", log);
+            //AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, log, Constants.EventLogId
 
             //log status of save to eventlogger
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "SaveLogStatus: " + saveLogStatus, Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "SaveLogStatus: " + saveLogStatus);
+            //ActionFactory.SysLog().Write("Info", "SaveLogStatus: " + saveLogStatus);
 
             return log;
         }
 
         public static object RunAction(IAction action)
         {
+            //InitLog();
+
             return action.Execute();
         }
 
@@ -133,7 +137,7 @@ namespace ActionFramework.Agent
 
         public static DateTime GetLastRunDate()
         {
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "GetLastRunDate from text file", Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "GetLastRunDate from text file");
             var file = Path.Combine(ActionHelper.GetDirectoryPath(), "lastrun.txt");
 
             if (!File.Exists(file))
@@ -147,7 +151,7 @@ namespace ActionFramework.Agent
 
         public static void SetLastRunDate()
         {
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "SetLastRunDate in text file", Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "SetLastRunDate in text file");
             System.IO.File.WriteAllText(Path.Combine(ActionHelper.GetDirectoryPath(), "lastrun.txt"), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
         }
 
@@ -162,6 +166,7 @@ namespace ActionFramework.Agent
             var agentId = AgentConfigurationContext.Current.AgentId;
             var xml = string.Empty;
 
+            //Action DataSource: if runmode is set to 'remote', the datasource is pulled from the server instance
             if (AgentConfigurationContext.Current.Mode == RunMode.Remote)
             {
                 var postclient = new RestClient(AgentConfigurationContext.Current.ServerUrl);

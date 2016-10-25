@@ -63,13 +63,14 @@
     <Compile Include="Base\ActionBase.cs" />
     <Compile Include="ActionFactory.cs" />
     <Compile Include="Classes\ActionList.cs" />
-    <Compile Include="Classes\EventLogger.cs" />
+    <Compile Include="SystemLogger\FileLogger.cs" />
+    <Compile Include="SystemLogger\EventLogger.cs" />
     <Compile Include="Classes\Status.cs" />
     <Compile Include="Enum\PropertyType.cs" />
     <Compile Include="Enum\RunMode.cs" />
     <Compile Include="Helpers\ActionHelper.cs" />
     <Compile Include="Helpers\ObjectSerializer.cs" />
-    <Compile Include="Helpers\ReflectionHelper.cs" />
+    <Compile Include="Reflections\ReflectionHelper.cs" />
     <Compile Include="Enum\ResourceOrigin.cs" />
     <Compile Include="Enum\LogType.cs">
       <SubType>Code</SubType>
@@ -79,8 +80,8 @@
     <Compile Include="Extensions\ModelExtensions.cs" />
     <Compile Include="Interfaces\IActionDataSource.cs" />
     <Compile Include="Interfaces\IActionLog.cs" />
-    <Compile Include="Interfaces\IExceptionLog.cs" />
-    <Compile Include="Interfaces\ILogBase.cs" />
+    <Compile Include="Logging\Interfaces\IExceptionLog.cs" />
+    <Compile Include="Logging\Interfaces\ILogBase.cs" />
     <Compile Include="Model\Action.cs" />
     <Compile Include="Model\ActionListParameters.cs" />
     <Compile Include="Model\Agent.cs" />
@@ -99,11 +100,10 @@
     <Compile Include="Model\ResourceParameter.cs" />
     <Compile Include="Classes\AgentConfiguration.cs" />
     <Compile Include="Classes\ApplicationInfo.cs" />
-    <Compile Include="Classes\Common.cs" />
     <Compile Include="Classes\Compressor.cs" />
     <Compile Include="Classes\Constants.cs" />
     <Compile Include="Classes\DateHelper.cs" />
-    <Compile Include="Classes\GlobalActionFunctions.cs" />
+    <Compile Include="Reflections\GlobalActionFunctions.cs" />
     <Compile Include="Model\Resources.cs" />
     <Compile Include="Enum\ResourceFileType.cs" />
     <Compile Include="Logging\Logs\XmlLog.cs" />
@@ -125,12 +125,10 @@
     <Compile Include="Enum\DataSourceFormat.cs" />
     <Compile Include="Enum\DataSourceLocation.cs" />
     <Compile Include="Enum\ActionStatus.cs" />
-    <Compile Include="Events\InitEventArgs.cs" />
     <Compile Include="Interfaces\IAction.cs" />
     <Compile Include="Interfaces\IActionList.cs" />
-    <Compile Include="Interfaces\ICommon.cs" />
     <Compile Include="Interfaces\ICompressor.cs" />
-    <Compile Include="Interfaces\ISystemLogger.cs" />
+    <Compile Include="SystemLogger\ISystemLogger.cs" />
     <Compile Include="Interfaces\IAgentConfiguration.cs" />
     <Compile Include="Logging\Interfaces\ILogElement.cs" />
     <Compile Include="Logging\Interfaces\ILogger.cs" />
@@ -148,6 +146,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
+    <Folder Include="Events\" />
     <Folder Include="Parameters\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

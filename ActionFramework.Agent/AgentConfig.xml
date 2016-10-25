@@ -3,15 +3,15 @@
 
   <Configuration>
 
-    <add key="AgentId" value="3"/>
+    <add key="AgentId" value="2"/>
     <add key="ServerUrl" value="http://localhost:1" />
-    <add key="LocalUrl" value="http://localhost:13" />
-    <add key="ActionFile" value="test.xml"/>
+    <add key="LocalUrl" value="http://localhost:2" />
+    <add key="ActionFile" value="demo.xml"/>
     <add key="DropFolder" value="C:\temp\drop\"/>
     <add key="Interval" value="3600000" />
     <add key="Debug" value="false" />
     <add key="RunMode" value="Local" /> <!--Local / Remote -->
-    <add key="Sync" value="true" />
+    <add key="Sync" value="false" />
 
   </Configuration>
 

@@ -21,7 +21,7 @@ namespace ActionFramework.Agent.Context
 
         public static void Initialize(int interval)
         {
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "TimerContext Initialized. Interval: '" + interval.ToString() + "'", Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "TimerContext Initialized. Interval: '" + interval.ToString() + "'");
             Activator.SetLastRunDate();
             timerInterval = interval;
             actionTimer = new System.Threading.Timer(new TimerCallback(actionTimer_Elapsed), null, 0, timerInterval);
@@ -32,7 +32,7 @@ namespace ActionFramework.Agent.Context
             try
             {
                 var lastRun = Activator.GetLastRunDate().ToString("yyyy-MM-dd HH:mm");
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "ActionTimer Elapsed. Previous " + lastRun + " Interval " + AgentConfigurationContext.Current.Interval.ToString(), Constants.EventLogId);
+                ActionFactory.SysLog().Write("Information", "ActionTimer Elapsed. Previous " + lastRun + " Interval " + AgentConfigurationContext.Current.Interval.ToString());
                 var ds = Activator.GetActionDataSource();
                 
                 var log = Activator.RunActions(new ActionListParameters(ds));
@@ -40,7 +40,7 @@ namespace ActionFramework.Agent.Context
             }
             catch (Exception ex)
             {
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, "ActionTimer Elapsed with 'RunActions' caused an error. '" + ex.Message + "'", Constants.EventLogId);
+                ActionFactory.SysLog().Write("Error", "ActionTimer Elapsed with 'RunActions' caused an error. '" + ex.Message + "'");
             }
 
             //TODO: Printout activity in colsole / app window

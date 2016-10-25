@@ -25,6 +25,7 @@ using ActionFramework.Logging;
 using Microsoft.Owin.Hosting;
 using RestSharp;
 using ActionFramework.Helpers;
+using ActionFramework.Agent.Sync;
 
 namespace ActionFramework.Agent
 {
@@ -63,13 +64,13 @@ namespace ActionFramework.Agent
 
         public static void InitializeTimer()
         {
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Initializing the timer. Interval " + AgentConfigurationContext.Current.Interval, Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "Initializing the timer. Interval " + AgentConfigurationContext.Current.Interval);
             TimerContext.Initialize(AgentConfigurationContext.Current.Interval);
         }
 
         private static void InitializeDropWatcher(string path)
         {
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Initialize Watcher on path: " + path, Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "Initialize Watcher on path: " + path);
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -90,7 +91,7 @@ namespace ActionFramework.Agent
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Initialize Watcher on path: " + path, Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "Initialize Watcher on path: " + path);
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -106,7 +107,7 @@ namespace ActionFramework.Agent
 
         private static void OnDropWatcherChanged(object source, FileSystemEventArgs e)
         {
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Filewatcher Event. file: " + e.FullPath, Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "Filewatcher Event. file: " + e.FullPath);
 
             try
             {
@@ -153,12 +154,12 @@ namespace ActionFramework.Agent
                 }
                 catch (Exception ex)
                 {
-                    ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, "Filewatcher Event Error. Could not delete file " + e.FullPath + ". Message: " + ex.Message, Constants.EventLogId);
+                    ActionFactory.SysLog().Write("Error", "Filewatcher Event Error. Could not delete file " + e.FullPath + ". Message: " + ex.Message);
                 }
             }
             catch (Exception ex)
             {
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, "Filewatcher Event Error. Fullpath: " + e.FullPath + ". Message: " + ex.Message, Constants.EventLogId);
+                ActionFactory.SysLog().Write("Error", "Filewatcher Event Error. Fullpath: " + e.FullPath + ". Message: " + ex.Message);
             }
             finally
             {
@@ -172,50 +173,19 @@ namespace ActionFramework.Agent
             if (AgentConfigurationContext.Current.Sync)
             {
                 //log to eventlogger
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Syncwatcher Event. file: " + e.FullPath, Constants.EventLogId);
+                ActionFactory.SysLog().Write("Info", "Syncwatcher Event. file: " + e.FullPath);
 
-                try
-                {
-                    //get the extension
-                    var fileName = Path.GetFileName(e.FullPath);
-                    var fileExtension = Path.GetExtension(e.FullPath);
-                    var filePath = e.FullPath;
-                    var compressedFile = ActionFactory.Compression.CompressFile(File.ReadAllBytes(filePath));
+                ISync watcherSync = new WatcherSync();
 
-                    //todo: sync the file
-                    //ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Syncwatcher Event. compressed file: " + compressedFile);
+                var status = watcherSync.SyncLog(e.FullPath);
 
-                    var postclient = new RestClient(AgentConfigurationContext.Current.ServerUrl);
-                    var postrequest = new RestRequest("api/agent/runaction?name=writelog", Method.POST);
-                    postrequest.RequestFormat = DataFormat.Json;
-
-                    var body = new object[2];
-                    body[0] = compressedFile;
-                    body[1] = AgentConfigurationContext.Current.AgentId; //agentId
-
-                    postrequest.AddBody(body);
-
-                    var response = postclient.Execute(postrequest);
-                    response.StatusCode.ToString();
-
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Syncwatcher Event. Response: " + response.StatusCode.ToString(), Constants.EventLogId);
-                        ArchiveWatcherFile(e.FullPath);
-                    }
-                    else
-                    { 
-                        ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Warning, string.Format("Syncwatcher Event. Statuscode: '{0}', {1}", response.StatusCode.ToString(), response.ErrorMessage), Constants.EventLogId);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Error, string.Format("Syncwatcher Event failed. Uri '{0}' {1} ", AgentConfigurationContext.Current.ServerUrl, ex.Message), Constants.EventLogId);
-                }
+                Console.WriteLine("Syncstatus OK. " + e.FullPath);
+                
             }
             else
             {
-                ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Syncwatcher Disabled", Constants.EventLogId);
+                ActionFactory.SysLog().Write("Info", "Syncwatcher Disabled");
+                Console.WriteLine("Sync failed. " + e.FullPath);
             }
         }
 
@@ -228,7 +198,7 @@ namespace ActionFramework.Agent
         protected override void OnStart(string[] args)
         {
             WebApp.Start<Startup>(AgentConfigurationContext.Current.LocalUrl);
-            ActionFactory.EventLogger(AgentConfigurationContext.Current.ServiceName).Write(EventLogEntryType.Information, "Started and opened servicehost", Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "Started and opened servicehost");
 
             InitializeTimer();
             InitializeDropWatcher(AgentConfigurationContext.Current.DropFolder);

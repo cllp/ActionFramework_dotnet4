@@ -9,6 +9,7 @@ using ActionFramework.Enum;
 using ActionFramework.Logging;
 using System.IO;
 using ActionFramework.Model;
+using ActionFramework.SystemLogger;
 
 namespace ActionFramework
 {
@@ -48,14 +49,9 @@ namespace ActionFramework
         //    return new ActionList(new XmlDataSource(xmlPath));
         //}
 
-        public static ISystemLogger EventLogger()
+        public static ISystemLogger SysLog()
         {
-            return new EventLogger();
-        }
-
-        public static ISystemLogger EventLogger(string caller)
-        {
-            return new EventLogger(caller);
+            return new FileLogger();
         }
 
         public static void InitializeLog()
@@ -89,9 +85,9 @@ namespace ActionFramework
             get { return new Replace(); }
         }
 
-        public static ICommon Common
-        {
-            get { return new Common(); }
-        }
+        //public static ICommon Common
+        //{
+        //    get { return new Common(); }
+        //}
     }
 }

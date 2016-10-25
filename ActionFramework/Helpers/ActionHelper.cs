@@ -268,5 +268,37 @@ namespace ActionFramework.Classes
 
         //    return response.StatusCode.ToString();
         //}
+
+        public static List<string> GetVariables(string value)
+        {
+            List<string> variables = new List<string>();
+            var pattern = @"\{(.*?)\}";
+
+            var matches = Regex.Matches(value, pattern);
+
+            foreach (Match m in matches)
+            {
+                if (!string.IsNullOrEmpty(m.Groups[1].Value))
+                    variables.Add(m.Groups[1].Value);
+            }
+
+            return variables;
+        }
+
+        public static List<string> GetVariables(string pattern, string value)
+        {
+            List<string> variables = new List<string>();
+            //var pattern = @"\{(.*?)\}";
+
+            var matches = Regex.Matches(value, pattern);
+
+            foreach (Match m in matches)
+            {
+                if (!string.IsNullOrEmpty(m.Groups[1].Value))
+                    variables.Add(m.Groups[1].Value);
+            }
+
+            return variables;
+        }
     }
 }

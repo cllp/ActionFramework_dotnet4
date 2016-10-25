@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -145,15 +144,16 @@ namespace ActionFramework.Classes
                 setting.Attribute("value").Value = value.ToString();
                 xDoc.Save(path);
 
-                ActionFactory.EventLogger(this.ServiceName).Write(EventLogEntryType.Information, string.Format("Agent configuration updated '{0}'. Key '{1}' Value '{2}'", path, key, value), Constants.EventLogId);
+                //ActionFactory.EventLogger(this.ServiceName).Write(EventLogEntryType.Information, string.Format("Agent configuration updated '{0}'. Key '{1}' Value '{2}'", path, key, value));
+                ActionFactory.SysLog().Write("Info", string.Format("Agent configuration updated '{0}'. Key '{1}' Value '{2}'", path, key, value));
 
                 return true;
             }
             catch (Exception ex)
             {
-                var exception = new Exception("Could not update agent setting file '" + configurationFile + "' with key '" + key + "' and value '" + value.ToString() + "'. Message '" + ex.Message + "'");
-                ActionFactory.EventLogger(this.ServiceName).Write(EventLogEntryType.Error, exception.Message, Constants.EventLogId);
-                return false;
+                var msg = "Could not update agent setting file '" + configurationFile + "' with key '" + key + "' and value '" + value.ToString() + "'. Message '" + ex.Message + "'";
+                ActionFactory.SysLog().Write("Error", msg);
+                throw;
             }
         }
 
@@ -188,7 +188,7 @@ namespace ActionFramework.Classes
             Debug = Convert.ToBoolean(GetElementValue(settings, "Debug"));
             Sync = Convert.ToBoolean(GetElementValue(settings, "Sync"));
 
-            ActionFactory.EventLogger(ServiceName).Write(EventLogEntryType.Information, "Loaded agent configuration: " + path, Constants.EventLogId);
+            ActionFactory.SysLog().Write("Info", "Loaded agent configuration: " + path);
         }
 
         //private string GetAgentUrl()
@@ -206,12 +206,9 @@ namespace ActionFramework.Classes
 
         private static string GetDirectoryPath()
         {
-            string path = Assembly.GetExecutingAssembly().Location;
-            FileInfo fileInfo = new FileInfo(path);
+            FileInfo fileInfo = new FileInfo(ReflectionHelper.GetAssemblyLocation());
             string dir = fileInfo.DirectoryName;
             return dir;
         }
-
-
     }
 }

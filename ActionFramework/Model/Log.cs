@@ -1,4 +1,5 @@
 ﻿using ActionFramework.Interfaces;
+using ActionFramework.Logging;
 using ActionFramework.Model.LogModel;
 using System;
 using System.Collections.Generic;
@@ -62,16 +63,16 @@ namespace ActionFramework.Model
         //    set { fatalLogs = value; }
         //}
 
-        private IList<InformationLog> informationLogs = new List<InformationLog>();
+        private IList<LogModel.InformationLog> informationLogs = new List<LogModel.InformationLog>();
 
-        public IList<InformationLog> InformationLogs
+        public IList<LogModel.InformationLog> InformationLogs
         {
             get { return informationLogs; }
             set { informationLogs = value; }
         }
-        private IList<WarningLog> warningLogs = new List<WarningLog>();
+        private IList<LogModel.WarningLog> warningLogs = new List<LogModel.WarningLog>();
 
-        public IList<WarningLog> WarningLogs
+        public IList<LogModel.WarningLog> WarningLogs
         {
             get { return warningLogs; }
             set { warningLogs = value; }
@@ -99,7 +100,7 @@ namespace ActionFramework.Model
                         }
                     case "Warning":
                         {
-                            var obj = new WarningLog();
+                            var obj = new LogModel.WarningLog();
                             FillProperties(obj, element);
                             FillExceptionDetails(obj, element);
                             WarningLogs.Add(obj);
@@ -127,7 +128,7 @@ namespace ActionFramework.Model
                         }
                     case "Information":
                         {
-                            var obj = new InformationLog();
+                            var obj = new LogModel.InformationLog();
                             FillProperties(obj, element);
                             InformationLogs.Add(obj);
                             break;
