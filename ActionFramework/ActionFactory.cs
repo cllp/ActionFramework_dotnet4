@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ActionFramework.Interfaces;
 using ActionFramework.Classes;
-using ActionFramework.Context;
+//using ActionFramework.Context;
 using ActionFramework.Enum;
 using ActionFramework.Logging;
 using System.IO;
@@ -15,19 +15,6 @@ namespace ActionFramework
 {
     public class ActionFactory
     {
-        //public static IActionList ActionList()
-        //{
-        //    return new ActionList(new RESTDataSource());
-        //}
-
-        //public static IActionList ActionList(string xml, DataSourceFormat format)
-        //{
-        //    if (format == DataSourceFormat.Nested)
-        //        return new ActionList(new RESTDataSource(xml));
-        //    else
-        //        return new ActionList(new XmlDataSource(xml));
-        //}
-
         public static IActionList ActionList(ActionListParameters par)
         {
             IActionList list;
@@ -35,7 +22,6 @@ namespace ActionFramework
             list = new ActionList(par.DataSource);
             var resources = par.Where(p => p.GetType().Equals(typeof(ResourceParameter)));
 
-            //list.Resources.AddRange(resources);
             foreach (ResourceParameter resource in resources)
             {
                 list.Resources.Add(resource);
@@ -43,11 +29,6 @@ namespace ActionFramework
 
             return list;
         }
-
-        //public static IActionList ActionList(string xmlPath)
-        //{
-        //    return new ActionList(new XmlDataSource(xmlPath));
-        //}
 
         public static ISystemLogger SysLog()
         {
@@ -58,11 +39,6 @@ namespace ActionFramework
         {
             if(!LogContext.IsInitialized)
                 LogContext.Initialize(new Logger());
-        }
-
-        public static void InitializeAgentConfiguration(IAgentConfiguration config)
-        {
-            AgentConfigurationContext.Initialize(config);
         }
 
         public static ILogger CurrentLog()
@@ -84,10 +60,5 @@ namespace ActionFramework
         {
             get { return new Replace(); }
         }
-
-        //public static ICommon Common
-        //{
-        //    get { return new Common(); }
-        //}
     }
 }

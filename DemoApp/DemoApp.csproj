@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatabaseIntegration.cs" />
     <Compile Include="FileListener.cs" />
     <Compile Include="DemoActionReturnValue.cs" />
     <Compile Include="DemoAction.cs" />

@@ -11,9 +11,10 @@ using ActionFramework.Interfaces;
 using ActionFramework.Enum;
 //using System.Reflection;
 using System.Text.RegularExpressions;
-using ActionFramework.Context;
+//using ActionFramework.Context;
 using ActionFramework.Logging;
 using ActionFramework.Model;
+using ActionFramework.Reflections;
 
 namespace ActionFramework.Classes
 {
@@ -100,15 +101,15 @@ namespace ActionFramework.Classes
                         a.Execute();
                         agentExecute++;
 
-                        if (AgentConfigurationContext.Current.Debug)
-                        {
-                            List<ActionProperty> lst = new List<ActionProperty>();
-                            lst.AddRange(a.DynamicProperties);
-                            var debug = new LogElements(LogType.Debug.ToString(), DateTime.Now, a);
-                            debug.Add(new XmlLog(lst));
-                            ActionFactory.CurrentLog().Add(debug);
-                            //a.Log.Info(a.Resources);
-                        }
+                        //if (AgentConfigurationContext.Current.Debug)
+                        //{
+                        //    List<ActionProperty> lst = new List<ActionProperty>();
+                        //    lst.AddRange(a.DynamicProperties);
+                        //    var debug = new LogElements(LogType.Debug.ToString(), DateTime.Now, a);
+                        //    debug.Add(new XmlLog(lst));
+                        //    ActionFactory.CurrentLog().Add(debug);
+                        //    //a.Log.Info(a.Resources);
+                        //}
                     }
                     else
                     {
@@ -146,8 +147,8 @@ namespace ActionFramework.Classes
             actionResult.Failed = (this.Count - agentExecute - internalActionExecute);
             actionResult.Runtime = runtime;
 
-            if(AgentConfigurationContext.Current.Debug)
-                actionResult.DataSource = this.dataSource;
+            //if(AgentConfigurationContext.Current.Debug)
+            //    actionResult.DataSource = this.dataSource;
 
             return actionResult;
             //return new ActionResultLog(string.Format(Constants.CountMessageText, this.Count, agentExecute.ToString(), internalActionExecute.ToString(), (this.Count - agentExecute - internalActionExecute).ToString()));

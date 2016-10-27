@@ -7,11 +7,12 @@ using System.Reflection;
 using ActionFramework.Classes;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
-using ActionFramework.Context;
+//using ActionFramework.Context;
 using ActionFramework.Enum;
 using ActionFramework.Logging;
 using ActionFramework.Model;
 using ActionFramework.SystemLogger;
+using ActionFramework.Reflections;
 
 namespace ActionFramework.Base
 {
@@ -427,22 +428,6 @@ namespace ActionFramework.Base
                     }
             }
         }
-
-        //private List<string> GetVariables(string value)
-        //{
-        //    List<string> variables = new List<string>();
-        //    var pattern = @"\{(.*?)\}";
-
-        //    var matches = Regex.Matches(value, pattern);
-
-        //    foreach (Match m in matches)
-        //    {
-        //        if (!string.IsNullOrEmpty(m.Groups[1].Value))
-        //            variables.Add(m.Groups[1].Value);
-        //    }
-
-        //    return variables;
-        //}
 
         public List<string> GetVariables(string value, string pattern)
         {

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using ActionFramework.Model.EventLog;
 using ActionFramework.Interfaces;
 using ActionFramework.Classes;
 using System.IO;
@@ -16,7 +15,7 @@ namespace ActionFramework.SystemLogger
     internal class FileLogger : ISystemLogger
     {
         private string source = "ActionFramework";
-        private string caller = "";
+        //private string caller = "";
         string log = "Application";
         private int eventId = 77;
 

@@ -1,9 +1,8 @@
 ﻿using ActionFramework.Agent.Context;
 using ActionFramework.Classes;
-using ActionFramework.Context;
+//using ActionFramework.Context;
 using ActionFramework.Agent.DataSource;
 using ActionFramework.Model;
-using ActionFramework.Model.EventLog;
 using ActionFramework.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -275,14 +274,6 @@ namespace ActionFramework.Agent.Api
         public string GetEventLogInfo()
         {
             return ActionFactory.SysLog().GetLog();
-        }
-
-        [HttpGet]
-        [Route("host/eventlog")]
-        public Model.EventLog.EventList GetEventLogInfo(object filter)
-        {
-            throw new NotImplementedException();
-            //return ActionFactory.EventLogger().GetEventLogs(logName, level, eventId, timeSpanStart, timeSpanEnd, max);
         }
 
         [HttpGet]

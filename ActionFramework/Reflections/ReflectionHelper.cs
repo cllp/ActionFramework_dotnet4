@@ -11,10 +11,11 @@ using System.Text.RegularExpressions;
 using ActionFramework.Model;
 using System.Configuration;
 using RestSharp;
-using ActionFramework.Context;
+//using ActionFramework.Context;
 using ActionFramework.Logging;
+using ActionFramework.Classes;
 
-namespace ActionFramework.Classes
+namespace ActionFramework.Reflections
 {
     public static class ReflectionHelper
     {
@@ -25,9 +26,7 @@ namespace ActionFramework.Classes
 
         public static Type[] GetCallingAssemblyTypes()
         {
-
             return Assembly.GetCallingAssembly().GetTypes();
-
         }
 
         public static Assembly[] GetDomainAssemblies()

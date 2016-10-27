@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using ActionFramework.Enum;
 
-namespace ActionFramework.Interfaces
+namespace ActionFramework.Agent.Configuration
 {
     public interface IAgentConfiguration
     {

@@ -9,22 +9,22 @@ namespace ActionFramework.Model
 {
     public partial class Agent
     {
-        private IEnumerable<Setting> settings;// = new IEnumerable<Setting>();
+        //private IEnumerable<Setting> settings;// = new IEnumerable<Setting>();
         private IEnumerable<Action> actions;// = new List<Action>();
         private List<Action> availableActions = new List<Action>();
-        private IEnumerable<Schedule> schedules;// = new List<Schedule>();
-        private IEnumerable<Log> logs;// = new List<Schedule>();
+        //private IEnumerable<Schedule> schedules;// = new List<Schedule>();
+        //private IEnumerable<Log> logs;// = new List<Schedule>();
         private IEnumerable<App> apps;// = new List<Schedule>();  
         //private IEnumerable<App> availableApps;// = new List<Schedule>();  
-        private Organization organization;// = new List<Schedule>();
+        //private Organization organization;// = new List<Schedule>();
         
 
-        [DataMember]
-        public IEnumerable<Setting> Settings
-        {
-            get { return settings; }
-            set { settings = value; }
-        }
+        //[DataMember]
+        //public IEnumerable<Setting> Settings
+        //{
+        //    get { return settings; }
+        //    set { settings = value; }
+        //}
 
         [DataMember]
         public IEnumerable<Action> Actions
@@ -39,18 +39,18 @@ namespace ActionFramework.Model
             set { availableActions = value; }
         }
 
-        [DataMember]
-        public IEnumerable<Schedule> Schedules
-        {
-            get { return schedules; }
-            set { schedules = value; }
-        }
+        //[DataMember]
+        //public IEnumerable<Schedule> Schedules
+        //{
+        //    get { return schedules; }
+        //    set { schedules = value; }
+        //}
 
-        public IEnumerable<Log> Logs
-        {
-            get { return logs; }
-            set { logs = value; }
-        }
+        //public IEnumerable<Log> Logs
+        //{
+        //    get { return logs; }
+        //    set { logs = value; }
+        //}
 
         [DataMember]
         public IEnumerable<App> Apps
@@ -84,34 +84,34 @@ namespace ActionFramework.Model
         //    }
         //}
 
-        public Organization Organization
-        {
-            get { return organization; }
-            set { organization = value; }
-        }
+        //public Organization Organization
+        //{
+        //    get { return organization; }
+        //    set { organization = value; }
+        //}
 
-        public int LogCount
-        {
-            get 
-            {
-                if (logs != null)
-                    return logs.Count();
-                else
-                    return 0;
-            }
-        }
+        //public int LogCount
+        //{
+        //    get 
+        //    {
+        //        if (logs != null)
+        //            return logs.Count();
+        //        else
+        //            return 0;
+        //    }
+        //}
 
-        public int ErrorCount
-        {
-            get 
-            {
-                var elogs = logs.Where(l => l.Type.Contains("Error"));
-                if (elogs != null && elogs.Count() > 0)
-                    return elogs.Count();
-                else
-                    return 0;
-            }
-        }
+        //public int ErrorCount
+        //{
+        //    get 
+        //    {
+        //        var elogs = logs.Where(l => l.Type.Contains("Error"));
+        //        if (elogs != null && elogs.Count() > 0)
+        //            return elogs.Count();
+        //        else
+        //            return 0;
+        //    }
+        //}
 
         //[DapperIgnore]
         //public SystemInformation SystemInformation

@@ -124,6 +124,9 @@
     <Compile Include="Activator.cs" />
     <Compile Include="Api\AgentController.cs" />
     <Compile Include="Api\TestController.cs" />
+    <Compile Include="Configuration\AgentConfiguration.cs" />
+    <Compile Include="Configuration\IAgentConfiguration.cs" />
+    <Compile Include="Context\AgentConfigurationContext.cs" />
     <Compile Include="DataSource\XmlDataSource.cs" />
     <Compile Include="Extensions\ActionExtension.cs" />
     <Compile Include="Extensions\ModelExtensions.cs" />

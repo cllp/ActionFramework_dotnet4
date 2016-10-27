@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using ActionFramework.Model.EventLog;
 using ActionFramework.Interfaces;
 
 namespace ActionFramework.Classes
